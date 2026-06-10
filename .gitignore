@@ -1,6 +1,3 @@
 .idea/
 node_modules/
-/dist/assets/index-BU0u-sfm.css
-/dist/assets/index-CX83k5P4.js
-/dist/favicon.svg
-/dist/index.html
+dist/
