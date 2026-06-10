@@ -1,0 +1,91 @@
+type User={
+    name: string;
+    role: string;
+    avatarUrl: string;
+}
+
+type PostProps = {
+    user: User;
+    message: string;
+    photoUrl: string;
+    time: number;
+    likeCount: number;
+    commentCount: number;
+}
+// dataalt ve altlari sil
+// hashtagleri duzelt
+
+export default function Post({user, message, photoUrl, time, likeCount, commentCount}: PostProps) {
+    return (
+        <article
+            className="bg-surface rounded-xl border border-primary/5 shadow-[0_4px_24px_rgba(18,5,28,0.3)] relative group transition-all duration-300 hover:border-primary/20">
+            <div className="absolute inset-0 texture-overlay pointer-events-none rounded-xl"></div>
+            <div className="p-md pb-2 flex items-center justify-between relative z-10">
+                <div className="flex items-center gap-3">
+                    <div
+                        className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant/30">
+                        <img alt="Author Avatar" className="w-full h-full object-cover"
+                             data-alt="A portrait of a male tabletop enthusiast with glasses, lit by soft ambient light against a dark background, reflecting a sophisticated, premium hobbyist vibe."
+                             src={user.avatarUrl}/>
+                    </div>
+                    <div>
+                        <h3 className="font-title-lg text-title-lg text-on-surface flex items-center gap-2">
+                            {user.name}
+                            <span
+                                className="bg-surface-variant text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-DEFAULT">{user.role}</span>
+                        </h3>
+                        <p className="font-body-md text-[13px] text-on-surface-variant">{time} hours
+                            ago</p>
+                    </div>
+                </div>
+                <button
+                    className="text-on-surface-variant hover:text-primary-fixed transition-colors p-1">
+                                        <span className="material-symbols-outlined"
+                                              data-icon="more_vert">more_vert</span>
+                </button>
+            </div>
+            <div className="px-md py-sm relative z-10">
+                <p className="font-body-md text-body-md text-on-surface/90 leading-relaxed mb-4">
+                    {message}
+                </p>
+                <div
+                    className="rounded-lg overflow-hidden border border-surface-variant mb-4 relative aspect-[16/9]">
+                    <img alt="Board game components"
+                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                         data-alt="A close-up, high-quality photograph of premium board game components. Focus is on heavy clay poker chips and thick cardboard tiles spread on a dark linen surface. Lighting is dramatic and moody, emphasizing the high-end, tactile nature of the hobby. Deep blacks and warm gold accents dominate."
+                         src={photoUrl}/>
+                </div>
+                <div className="flex flex-wrap gap-2 mb-2">
+                      <span
+                          className="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2.5 py-1 rounded-DEFAULT border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-pointer">
+                          #BrassBirmingham
+                      </span>
+                    <span
+                        className="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2.5 py-1 rounded-DEFAULT border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-pointer">
+                        #ComponentUpgrades
+                    </span>
+                </div>
+            </div>
+            <div
+                className="px-md py-3 border-t border-surface-variant flex items-center gap-6 relative z-10 bg-surface-container-lowest/50 rounded-b-xl">
+                <button
+                    className="flex items-center gap-2 text-on-surface-variant hover:text-secondary transition-colors group">
+                      <span className="material-symbols-outlined group-hover:scale-110 transition-transform"
+                            data-icon="favorite">favorite</span>
+                    <span className="font-label-md text-label-md">{likeCount}</span>
+                </button>
+                <button
+                    className="flex items-center gap-2 text-on-surface-variant hover:text-primary-fixed transition-colors group">
+                      <span className="material-symbols-outlined group-hover:scale-110 transition-transform"
+                            data-icon="chat_bubble">chat_bubble</span>
+                    <span className="font-label-md text-label-md">{commentCount} Comments</span>
+                </button>
+                <button
+                    className="flex items-center gap-2 text-on-surface-variant hover:text-primary-fixed transition-colors group ml-auto">
+                      <span className="material-symbols-outlined group-hover:-rotate-12 transition-transform"
+                            data-icon="share">share</span>
+                </button>
+            </div>
+        </article>
+    )
+}
