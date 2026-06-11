@@ -90,10 +90,6 @@ export default function GameDetail() {
                         <a className="border-b-2 border-primary text-primary whitespace-nowrap py-4 px-1 text-label-md font-label-md font-medium"
                            href="#">Overview</a>
                         <a className="border-b-2 border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline-variant whitespace-nowrap py-4 px-1 text-label-md font-label-md font-medium transition-colors"
-                           href="#">Stats &amp; Mechanics</a>
-                        <a className="border-b-2 border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline-variant whitespace-nowrap py-4 px-1 text-label-md font-label-md font-medium transition-colors"
-                           href="#">Rules</a>
-                        <a className="border-b-2 border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline-variant whitespace-nowrap py-4 px-1 text-label-md font-label-md font-medium transition-colors"
                            href="#">Community</a>
                     </nav>
                 </div>

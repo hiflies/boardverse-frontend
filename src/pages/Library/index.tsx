@@ -55,23 +55,19 @@ export default function Library() {
                         {games.map((game) => (
                             <GameCard
                                 key={game.id}
-                                name={game.name}
-                                description={game.description}
-                                peopleCount={{min : game.minPlayers, max : game.maxPlayers}}
-                                duration={game.duration || 50}
-                                complexity={game.complexity || 5}
+                                game={game}
                             />
                         ))}
                     </div>
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-                   <GameCard
-                       name="Brass: Birmingham"
-                       description="Build networks, develop industries, and navigate the industrial revolution in this economic masterpiece."
-                       peopleCount={{min:2, max:4}}
-                       duration={120}
-                       complexity={3.90}
-                   />
+                   {/*<GameCard*/}
+                   {/*    name="Brass: Birmingham"*/}
+                   {/*    description="Build networks, develop industries, and navigate the industrial revolution in this economic masterpiece."*/}
+                   {/*    peopleCount={{min:2, max:4}}*/}
+                   {/*    duration={120}*/}
+                   {/*    complexity={3.90}*/}
+                   {/*/>*/}
                     <div
                         className="bg-surface rounded-xl overflow-hidden border border-outline-variant/20 relative group card-hover transition-all duration-300 flex flex-col">
                         <div
