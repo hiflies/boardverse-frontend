@@ -13,11 +13,11 @@ html, body {
 }
 
 ::-webkit-scrollbar-track {
-    background: #3e2f49;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #1b0d25;
+    background: #3e2f49;
     border-radius: 4px;
 }
 

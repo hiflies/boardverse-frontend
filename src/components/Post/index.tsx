@@ -1,4 +1,4 @@
-type User={
+type User = {
     name: string;
     role: string;
     avatarUrl: string;
@@ -8,14 +8,13 @@ type PostProps = {
     user: User;
     message: string;
     photoUrl: string;
+    tags: string[];
     time: number;
     likeCount: number;
     commentCount: number;
 }
-// dataalt ve altlari sil
-// hashtagleri duzelt
 
-export default function Post({user, message, photoUrl, time, likeCount, commentCount}: PostProps) {
+export default function Post({user, message, photoUrl, time, likeCount, commentCount, tags}: PostProps) {
     return (
         <article
             className="bg-surface rounded-xl border border-primary/5 shadow-[0_4px_24px_rgba(18,5,28,0.3)] relative group transition-all duration-300 hover:border-primary/20">
@@ -24,9 +23,10 @@ export default function Post({user, message, photoUrl, time, likeCount, commentC
                 <div className="flex items-center gap-3">
                     <div
                         className="w-10 h-10 rounded-full overflow-hidden border border-outline-variant/30">
-                        <img alt="Author Avatar" className="w-full h-full object-cover"
-                             data-alt="A portrait of a male tabletop enthusiast with glasses, lit by soft ambient light against a dark background, reflecting a sophisticated, premium hobbyist vibe."
-                             src={user.avatarUrl}/>
+                        <img
+                            className="w-full h-full object-cover"
+                            src={user.avatarUrl}
+                        />
                     </div>
                     <div>
                         <h3 className="font-title-lg text-title-lg text-on-surface flex items-center gap-2">
@@ -34,14 +34,13 @@ export default function Post({user, message, photoUrl, time, likeCount, commentC
                             <span
                                 className="bg-surface-variant text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-DEFAULT">{user.role}</span>
                         </h3>
-                        <p className="font-body-md text-[13px] text-on-surface-variant">{time} hours
-                            ago</p>
+                        <p className="font-body-md text-[13px] text-on-surface-variant">
+                            {time} hours ago
+                        </p>
                     </div>
                 </div>
-                <button
-                    className="text-on-surface-variant hover:text-primary-fixed transition-colors p-1">
-                                        <span className="material-symbols-outlined"
-                                              data-icon="more_vert">more_vert</span>
+                <button className="text-on-surface-variant hover:text-primary-fixed transition-colors p-1">
+                    <span className="material-symbols-outlined" data-icon="more_vert">more_vert</span>
                 </button>
             </div>
             <div className="px-md py-sm relative z-10">
@@ -50,20 +49,18 @@ export default function Post({user, message, photoUrl, time, likeCount, commentC
                 </p>
                 <div
                     className="rounded-lg overflow-hidden border border-surface-variant mb-4 relative aspect-[16/9]">
-                    <img alt="Board game components"
-                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                         data-alt="A close-up, high-quality photograph of premium board game components. Focus is on heavy clay poker chips and thick cardboard tiles spread on a dark linen surface. Lighting is dramatic and moody, emphasizing the high-end, tactile nature of the hobby. Deep blacks and warm gold accents dominate."
-                         src={photoUrl}/>
+                    <img
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                        src={photoUrl}
+                    />
                 </div>
                 <div className="flex flex-wrap gap-2 mb-2">
-                      <span
-                          className="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2.5 py-1 rounded-DEFAULT border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-pointer">
-                          #BrassBirmingham
-                      </span>
-                    <span
-                        className="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2.5 py-1 rounded-DEFAULT border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-pointer">
-                        #ComponentUpgrades
-                    </span>
+                    {tags.map((tag) => (
+                        <span key={tag}
+                            className="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2.5 py-1 rounded-DEFAULT border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-pointer">
+                            #{tag}
+                        </span>
+                    ))}
                 </div>
             </div>
             <div

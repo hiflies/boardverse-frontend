@@ -1,22 +1,13 @@
-import { Outlet, createRootRoute, createRoute, createRouter } from '@tanstack/react-router'
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
+import {createRootRoute, createRoute, createRouter } from '@tanstack/react-router'
 import HomePage from "./pages/Home";
 import Library from "./pages/Library";
 import GameDetail from "./pages/GameDetail";
 import LoginPage from "./pages/LoginPage";
 import Profile from "./pages/Profile";
+import MainLayout from "./layout/MainLayout";
 
 const rootRoute = createRootRoute({
-    component: () => (
-        <div className="flex flex-col h-screen">
-            <Navbar/>
-            <Sidebar/>
-            <div className="bg-background border-l border-t rounded-tl-[10px] border-outline-variant ml-64 flex-1 flex overflow-y-scroll">
-                <Outlet/>
-            </div>
-        </div>
-    ),
+    component: MainLayout,
 })
 
 const indexRoute = createRoute({

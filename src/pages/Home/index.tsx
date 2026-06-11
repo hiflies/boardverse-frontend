@@ -1,4 +1,5 @@
 import Post from "../../components/Post";
+import GameLog from "../../components/GameLog";
 
 export default function HomePage() {
     return (
@@ -67,13 +68,19 @@ export default function HomePage() {
                     </div>
                 </section>
                 <div className="flex flex-col gap-lg">
-                    <Post user={{name:"Marcus Vance", role:"User", avatarUrl:"https://lh3.googleusercontent.com/aida-public/AB6AXuCZF4DT9-7fR_0LgFpGlP4BoQ43pRapBc45SMaZmjlVQc6kRtK_OWYjW53FCTPDr3Znc4kQ1sRT0oDS2qpylL5cXnQ6rT3QfBSeYHpyZCc9HIdwEKnNPtpeu9kq_Eh2Kbf8fUfeLzQYC9qDJytPWkXNH8kf21KV1D9fYAfIIU-xdKj52mV2LJA-0cyeSsTIflcQ4H-HOnlBEmLM8XjS519mC0jp7mgMWJp8Ri-as_uZGlYIx_2-Y3VRccqtrB9pzO0TWGIVbgObpi0"}}
+                    <Post user={{
+                        name: "Marcus Vance",
+                        role: "User",
+                        avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZF4DT9-7fR_0LgFpGlP4BoQ43pRapBc45SMaZmjlVQc6kRtK_OWYjW53FCTPDr3Znc4kQ1sRT0oDS2qpylL5cXnQ6rT3QfBSeYHpyZCc9HIdwEKnNPtpeu9kq_Eh2Kbf8fUfeLzQYC9qDJytPWkXNH8kf21KV1D9fYAfIIU-xdKj52mV2LJA-0cyeSsTIflcQ4H-HOnlBEmLM8XjS519mC0jp7mgMWJp8Ri-as_uZGlYIx_2-Y3VRccqtrB9pzO0TWGIVbgObpi0"
+                    }}
+                          tags={["BrassBirmingham", "ComponentUpgrades"]}
                           time={2}
                           message="Finally got around to unboxing the collector's edition of Brass: Birmingham. The clay poker chips are an absolute game-changer for the tactile experience. Has anyone tried upgrading their other economic euros with similar components?"
                           photoUrl="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ9yoHe0JNBhtdwbUWs93_b4td7pV44QOvglHZz6HLpzUXs6hDyDnfdmAYcI4bdZBw0y4tPfCVDRAjMPnaFgcnS8LMPd2WwznZ7tUGIdZRdd7wLxpegiY67GUG_mhJJsLDi4S_wPdEnpvT58aYNMiYbMmRNrKNPCyYPHew6DORWbKm9jlrcGt3NkPY-dFG_GhwLSYxRPSUDQfFohkloWiMv3qTjHpqxPBogp4WmXfq_XcJHv_BG6RTyfBcY23M57i5tFLdJwuX8ek"
                           likeCount={24}
                           commentCount={12}
                     />
+                    <GameLog/>
                     <article
                         className="bg-surface rounded-xl border border-secondary/20 shadow-[0_4px_24px_rgba(238,190,1,0.05)] relative group transition-all duration-300">
                         <div className="absolute inset-0 texture-overlay pointer-events-none rounded-xl"></div>
@@ -144,7 +151,12 @@ export default function HomePage() {
                             </div>
                         </div>
                     </article>
-                    <Post user={{name:"Halime Ucar Turk", role:"Admin", avatarUrl:"https://lh3.googleusercontent.com/aida-public/AB6AXuCZF4DT9-7fR_0LgFpGlP4BoQ43pRapBc45SMaZmjlVQc6kRtK_OWYjW53FCTPDr3Znc4kQ1sRT0oDS2qpylL5cXnQ6rT3QfBSeYHpyZCc9HIdwEKnNPtpeu9kq_Eh2Kbf8fUfeLzQYC9qDJytPWkXNH8kf21KV1D9fYAfIIU-xdKj52mV2LJA-0cyeSsTIflcQ4H-HOnlBEmLM8XjS519mC0jp7mgMWJp8Ri-as_uZGlYIx_2-Y3VRccqtrB9pzO0TWGIVbgObpi0"}}
+                    <Post user={{
+                        name: "Halime Ucar Turk",
+                        role: "Admin",
+                        avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZF4DT9-7fR_0LgFpGlP4BoQ43pRapBc45SMaZmjlVQc6kRtK_OWYjW53FCTPDr3Znc4kQ1sRT0oDS2qpylL5cXnQ6rT3QfBSeYHpyZCc9HIdwEKnNPtpeu9kq_Eh2Kbf8fUfeLzQYC9qDJytPWkXNH8kf21KV1D9fYAfIIU-xdKj52mV2LJA-0cyeSsTIflcQ4H-HOnlBEmLM8XjS519mC0jp7mgMWJp8Ri-as_uZGlYIx_2-Y3VRccqtrB9pzO0TWGIVbgObpi0"
+                    }}
+                          tags={["budabenimtagim", "ikincisinideyazmamgerekti", "budadeneme"]}
                           message="bu da boyle bisi oldu, umarim olmasi gerektigi gibi olmustur."
                           photoUrl="oyun.jpg"
                           time={3}

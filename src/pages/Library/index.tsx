@@ -1,16 +1,12 @@
 import GameCard from "../../components/GameCard";
-
-
-// TODO filteryi kaldir, aktif filte kalacak
-// sag ust kosedeki iki buton islevsiz. kalkacak
-// sayfanin eni boyu duzzelt
-// srcoll u eski haline geri getir renklerini
-//
+import { useGames } from "../../hooks/useGames";
 
 export default function Library() {
+    const { data: games, isLoading, isError, error } = useGames();
+
     return (
         <main className="flex-1 flex flex-col md:flex-row w-full max-w-max-width mx-auto">
-            <div className="flex-1 p-gutter md:p-margin-desktop flex flex-col gap-lg overflow-y-auto">
+            <div className="flex-1 p-gutter md:p-margin-desktop flex flex-col gap-lg">
                 <div className="flex flex-col gap-4">
                     <div className="flex items-end justify-between">
                         <div>
@@ -18,16 +14,6 @@ export default function Library() {
                                 Library</h1>
                             <p className="text-on-surface-variant mt-2 font-body-lg text-body-lg">Showing 142 premium
                                 titles matching your criteria.</p>
-                        </div>
-                        <div className="hidden md:flex gap-2">
-                            <button
-                                className="p-2 rounded-lg bg-surface border border-outline-variant/50 text-primary hover:bg-surface-variant transition-colors">
-                                <span className="material-symbols-outlined">grid_view</span>
-                            </button>
-                            <button
-                                className="p-2 rounded-lg bg-transparent text-on-surface-variant hover:bg-surface-variant/50 transition-colors">
-                                <span className="material-symbols-outlined">view_list</span>
-                            </button>
                         </div>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 mt-2">
@@ -57,39 +43,27 @@ export default function Library() {
                                 className="material-symbols-outlined text-[14px]">close</span></button>
                         </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-4 py-4 border-y border-outline-variant/10 mt-4">
-                        <div className="relative group">
-                            <button
-                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container border border-outline-variant/30 text-on-surface-variant hover:border-primary transition-colors font-label-md">
-                                Mechanics <span className="material-symbols-outlined text-[18px]">expand_more</span>
-                            </button>
-                        </div>
-                        <div className="relative group">
-                            <button
-                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container border border-outline-variant/30 text-on-surface-variant hover:border-primary transition-colors font-label-md">
-                                Play Time <span className="material-symbols-outlined text-[18px]">expand_more</span>
-                            </button>
-                        </div>
-                        <div className="relative group">
-                            <button
-                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container border border-outline-variant/30 text-on-surface-variant hover:border-primary transition-colors font-label-md">
-                                Complexity <span className="material-symbols-outlined text-[18px]">expand_more</span>
-                            </button>
-                        </div>
-                        <div className="relative group">
-                            <button
-                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container border border-outline-variant/30 text-on-surface-variant hover:border-primary transition-colors font-label-md">
-                                Player Count <span className="material-symbols-outlined text-[18px]">expand_more</span>
-                            </button>
-                        </div>
-                        <div className="ml-auto">
-                            <button
-                                className="text-on-surface-variant hover:text-secondary text-sm font-label-md transition-colors flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[18px]">refresh</span> Clear All
-                            </button>
-                        </div>
-                    </div>
                 </div>
+                {isLoading && (
+                    <p className="text-on-surface-variant font-body-md text-body-md">Loading games...</p>
+                )}
+                {isError && (
+                    <p className="text-error font-body-md text-body-md">Failed to load games: {error.message}</p>
+                )}
+                {games && games.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                        {games.map((game) => (
+                            <GameCard
+                                key={game.id}
+                                name={game.name}
+                                description={game.description}
+                                peopleCount={{min : game.minPlayers, max : game.maxPlayers}}
+                                duration={game.duration || 50}
+                                complexity={game.complexity || 5}
+                            />
+                        ))}
+                    </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
                    <GameCard
                        name="Brass: Birmingham"

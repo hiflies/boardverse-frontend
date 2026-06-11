@@ -1,8 +1,20 @@
-export default function GameDetail(){
+import {useParams} from "@tanstack/react-router";
+import {useGame} from "../../hooks/useGames.ts";
+
+export default function GameDetail() {
+
+    const gameId = useParams({from: '/games/$gameId', select: params => params.gameId});
+    const {data: game, isLoading, isError, error} = useGame(gameId);
+    if (isLoading || isError || !game) {
+        return (
+            <div>Loading...</div>
+        );
+    }
+
     return (
         <main className="flex-1 overflow-y-auto">
-                        <section className="relative w-full h-[50vh] min-h-[400px] flex items-end">
-                                <div className="absolute inset-0 z-0 bg-surface-container">
+            <section className="relative w-full h-[50vh] min-h-[400px] flex items-end">
+                <div className="absolute inset-0 z-0 bg-surface-container">
                     <img alt="Hero Background" className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
                          data-alt="A macro, high-resolution photograph of a premium board game setup in a dark, atmospheric setting. Intricate cardboard tokens, wooden pieces, and cards with a linen finish rest on a textured, dark-toned game board. The scene is illuminated by warm, directional lighting that highlights the physical textures and metallic gold accents, creating a tactile, sophisticated, and immersive tabletop gaming environment."
                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2WIF2yzeb2sZs7UWUfzSBPI7FrSLdjuze8OoZIWMPHJi9o_c1sIfYbLxgJtEplPBUYXJqODZYMSdMAeeslHxSkERn9Oc2KwJaKqHAT7Yv86tduhkpht9Q8eomZBVybIefBJi5GSNvhTtT8Y6tyG9UWoW8p_kjuvb3h_Dab6m9VTj1ielSXjI7YNOj3i9kneiC7bmcDmLrnFENsoKVdoKF5Qb2Y89aUuEOPBMdqa0Zq5eLFf5FrV59_jIKpVVodXZ1Tr4HWycMKSc"/>
@@ -10,23 +22,22 @@ export default function GameDetail(){
                         className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
                     <div className="absolute inset-0 texture-overlay"></div>
                 </div>
-                                <div
+                <div
                     className="relative z-10 w-full max-w-[1280px] mx-auto px-margin-mobile md:px-gutter lg:px-margin-desktop pb-lg flex flex-col md:flex-row md:items-end justify-between gap-md">
                     <div className="max-w-2xl">
                         <div className="flex items-center gap-xs mb-2">
-<span
-    className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-label-sm font-label-sm flex items-center gap-1">
-<span className="material-symbols-outlined text-[14px]">star</span>
+                            <span
+                                className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-label-sm font-label-sm flex items-center gap-1">
+                                <span className="material-symbols-outlined text-[14px]">star</span>
                                 8.7 BGG
                             </span>
                             <span
                                 className="text-label-md font-label-md text-on-surface-variant tracking-widest uppercase">Economic Strategy</span>
                         </div>
-                        <h1 className="text-display-lg-mobile md:text-display-lg font-display-lg text-on-surface mb-2 tracking-tight">Brass:
-                            Birmingham</h1>
+                        <h1 className="text-display-lg-mobile md:text-display-lg font-display-lg text-on-surface mb-2 tracking-tight">{game.name}</h1>
                         <p className="text-title-lg font-title-lg text-on-surface-variant font-medium mb-4">The
                             Industrial Revolution in the North of England</p>
-                                                <div className="flex flex-wrap items-center gap-6">
+                        <div className="flex flex-wrap items-center gap-6">
                             <div className="flex items-center gap-2">
                                 <span className="material-symbols-outlined text-secondary text-sm">group</span>
                                 <span
@@ -54,7 +65,7 @@ export default function GameDetail(){
                             </div>
                         </div>
                     </div>
-                                        <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-4">
                         <button
                             className="bg-primary-container text-on-primary-container hover:brightness-110 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 shadow-lg flex-1 min-w-[180px]">
                             <span className="material-symbols-outlined">add</span>
@@ -73,8 +84,8 @@ export default function GameDetail(){
                     </div>
                 </div>
             </section>
-                        <div className="max-w-[1280px] mx-auto px-margin-mobile md:px-gutter lg:px-margin-desktop py-lg">
-                                <div className="border-b border-outline-variant/20 mb-lg">
+            <div className="max-w-[1280px] mx-auto px-margin-mobile md:px-gutter lg:px-margin-desktop py-lg">
+                <div className="border-b border-outline-variant/20 mb-lg">
                     <nav className="-mb-px flex gap-8 overflow-x-auto">
                         <a className="border-b-2 border-primary text-primary whitespace-nowrap py-4 px-1 text-label-md font-label-md font-medium"
                            href="#">Overview</a>
@@ -86,8 +97,8 @@ export default function GameDetail(){
                            href="#">Community</a>
                     </nav>
                 </div>
-                                <div className="flex flex-col gap-xl max-w-4xl">
-                                        <section>
+                <div className="flex flex-col gap-xl max-w-4xl">
+                    <section>
                         <h2 className="text-headline-md font-headline-md text-primary mb-md flex items-center gap-2">
                             <span className="material-symbols-outlined text-secondary">menu_book</span>
                             Overview
@@ -108,7 +119,7 @@ export default function GameDetail(){
                             </p>
                         </div>
                     </section>
-                                        <section>
+                    <section>
                         <h2 className="text-headline-sm font-headline-sm text-primary mb-md">Mechanics &amp; Theme</h2>
                         <div className="flex flex-wrap gap-3">
                             <span
