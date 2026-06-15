@@ -18,7 +18,7 @@ const indexRoute = createRoute({
 
 const libraryRoute = createRoute({
     getParentRoute: () => rootRoute,
-    path: '/library',
+    path: '/games',
     component: Library,
 })
 

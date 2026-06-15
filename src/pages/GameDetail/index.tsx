@@ -1,10 +1,12 @@
 import {useParams} from "@tanstack/react-router";
 import {useGame} from "../../hooks/useGames.ts";
+import Markdown from "react-markdown";
 
 export default function GameDetail() {
 
     const gameId = useParams({from: '/games/$gameId', select: params => params.gameId});
     const {data: game, isLoading, isError, error} = useGame(gameId);
+
     if (isLoading || isError || !game) {
         return (
             <div>Loading...</div>
@@ -15,9 +17,8 @@ export default function GameDetail() {
         <main className="flex-1 overflow-y-auto">
             <section className="relative w-full h-[50vh] min-h-[400px] flex items-end">
                 <div className="absolute inset-0 z-0 bg-surface-container">
-                    <img alt="Hero Background" className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
-                         data-alt="A macro, high-resolution photograph of a premium board game setup in a dark, atmospheric setting. Intricate cardboard tokens, wooden pieces, and cards with a linen finish rest on a textured, dark-toned game board. The scene is illuminated by warm, directional lighting that highlights the physical textures and metallic gold accents, creating a tactile, sophisticated, and immersive tabletop gaming environment."
-                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2WIF2yzeb2sZs7UWUfzSBPI7FrSLdjuze8OoZIWMPHJi9o_c1sIfYbLxgJtEplPBUYXJqODZYMSdMAeeslHxSkERn9Oc2KwJaKqHAT7Yv86tduhkpht9Q8eomZBVybIefBJi5GSNvhTtT8Y6tyG9UWoW8p_kjuvb3h_Dab6m9VTj1ielSXjI7YNOj3i9kneiC7bmcDmLrnFENsoKVdoKF5Qb2Y89aUuEOPBMdqa0Zq5eLFf5FrV59_jIKpVVodXZ1Tr4HWycMKSc"/>
+                    <img className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
+                         src={game.imageUrl}/>
                     <div
                         className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
                     <div className="absolute inset-0 texture-overlay"></div>
@@ -29,39 +30,48 @@ export default function GameDetail() {
                             <span
                                 className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-label-sm font-label-sm flex items-center gap-1">
                                 <span className="material-symbols-outlined text-[14px]">star</span>
-                                8.7 BGG
+                                {game.averageRating}
                             </span>
-                            <span
-                                className="text-label-md font-label-md text-on-surface-variant tracking-widest uppercase">Economic Strategy</span>
+                            {game.categories.map((category) => (
+                                <span key={category.id}
+                                      className="text-label-md font-label-md text-on-surface-variant tracking-widest uppercase">
+                                        {category.name}
+                                </span>
+                            ))}
+
                         </div>
                         <h1 className="text-display-lg-mobile md:text-display-lg font-display-lg text-on-surface mb-2 tracking-tight">{game.name}</h1>
-                        <p className="text-title-lg font-title-lg text-on-surface-variant font-medium mb-4">The
-                            Industrial Revolution in the North of England</p>
+                        <p className="text-title-lg font-title-lg text-on-surface-variant font-medium mb-4">
+                            {game.tagline}
+                        </p>
                         <div className="flex flex-wrap items-center gap-6">
                             <div className="flex items-center gap-2">
                                 <span className="material-symbols-outlined text-secondary text-sm">group</span>
                                 <span
                                     className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Players:</span>
-                                <span className="text-body-md font-body-md text-on-surface font-medium">2 - 4</span>
+                                <span
+                                    className="text-body-md font-body-md text-on-surface font-medium">{game.minPlayers} - {game.maxPlayers}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="material-symbols-outlined text-secondary text-sm">schedule</span>
                                 <span
                                     className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Play Time:</span>
                                 <span
-                                    className="text-body-md font-body-md text-on-surface font-medium">60 - 120 Min</span>
+                                    className="text-body-md font-body-md text-on-surface font-medium">{game.duration}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="material-symbols-outlined text-secondary text-sm">cake</span>
                                 <span
                                     className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Age:</span>
-                                <span className="text-body-md font-body-md text-on-surface font-medium">14+</span>
+                                <span
+                                    className="text-body-md font-body-md text-on-surface font-medium">{game.minAge}+</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="material-symbols-outlined text-secondary text-sm">psychology</span>
                                 <span
                                     className="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Complexity:</span>
-                                <span className="text-body-md font-body-md text-on-surface font-medium">3.9 / 5</span>
+                                <span
+                                    className="text-body-md font-body-md text-on-surface font-medium">{game.complexity} / 5</span>
                             </div>
                         </div>
                     </div>
@@ -76,11 +86,14 @@ export default function GameDetail() {
                             <span className="material-symbols-outlined">edit_square</span>
                             Log a Play
                         </button>
-                        <button
-                            className="bg-surface-bright/50 backdrop-blur-sm text-on-surface hover:bg-surface-bright/70 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 border border-white/10 flex-1 min-w-[180px]">
-                            <span className="material-symbols-outlined">description</span>
-                            Rules / How to Play
-                        </button>
+                        {Boolean(game.gameRulesUrl) &&
+                            <a
+                                href={game.gameRulesUrl} download={true}
+                                className="bg-surface-bright/50 backdrop-blur-sm text-on-surface hover:bg-surface-bright/70 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 border border-white/10 flex-1 min-w-[180px]">
+                                <span className="material-symbols-outlined">description</span>
+                                Rules / How to Play
+                            </a>
+                        }
                     </div>
                 </div>
             </section>
@@ -101,18 +114,9 @@ export default function GameDetail() {
                         </h2>
                         <div
                             className="prose prose-invert prose-p:text-body-lg prose-p:font-body-lg prose-p:text-on-surface-variant prose-p:leading-relaxed max-w-none">
-                            <p className="">
-                                Brass: Birmingham is an economic strategy game sequel to Martin Wallace's 2007
-                                masterpiece, Brass. It tells the story of competing entrepreneurs in Birmingham during
-                                the industrial revolution, between the years of 1770-1870.
-                            </p>
-                            <p className="mt-4">
-                                You must develop, build, and establish your industries and network, in an effort to
-                                exploit low or high market demands. The game is played over two halves: the canal era
-                                and the rail era. To win, score the most Victory Points (VPs), which are counted at the
-                                end of each half. VPs are gained from your canals, rails and established (flipped)
-                                industry tiles.
-                            </p>
+                            <Markdown>
+                                {game.description}
+                            </Markdown>
                         </div>
                     </section>
                     <section>

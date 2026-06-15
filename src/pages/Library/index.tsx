@@ -1,8 +1,19 @@
 import GameCard from "../../components/GameCard";
-import { useGames } from "../../hooks/useGames";
+import {useGames} from "../../hooks/useGames";
+import "./style.css";
+import {useUIStore} from "../../store/ui.tsx";
+import {useEffect} from "react";
+import Filter from "./Filter.tsx";
 
 export default function Library() {
-    const { data: games, isLoading, isError, error } = useGames();
+    const {data: games, isLoading, isError, error} = useGames();
+    const {setSidebarSlot} = useUIStore();
+
+    useEffect(() => {
+        setSidebarSlot(<Filter/>);
+
+        return () => setSidebarSlot(null);
+    }, [setSidebarSlot]);
 
     return (
         <main className="flex-1 flex flex-col md:flex-row w-full max-w-max-width mx-auto">
@@ -14,33 +25,6 @@ export default function Library() {
                                 Library</h1>
                             <p className="text-on-surface-variant mt-2 font-body-lg text-body-lg">Showing 142 premium
                                 titles matching your criteria.</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2 mt-2">
-                        <span className="text-on-surface-variant text-sm font-label-md mr-2">Active Filters:</span>
-                        <div
-                            className="flex items-center gap-1 bg-surface-container border border-secondary/30 text-secondary px-3 py-1.5 rounded-full font-label-sm text-label-sm">
-                            Worker Placement
-                            <button className="hover:text-white transition-colors ml-1 focus:outline-none"><span
-                                className="material-symbols-outlined text-[14px]">close</span></button>
-                        </div>
-                        <div
-                            className="flex items-center gap-1 bg-surface-container border border-secondary/30 text-secondary px-3 py-1.5 rounded-full font-label-sm text-label-sm">
-                            Area Control
-                            <button className="hover:text-white transition-colors ml-1 focus:outline-none"><span
-                                className="material-symbols-outlined text-[14px]">close</span></button>
-                        </div>
-                        <div
-                            className="flex items-center gap-1 bg-surface-container border border-primary/30 text-primary px-3 py-1.5 rounded-full font-label-sm text-label-sm">
-                            Weight: 3-4
-                            <button className="hover:text-white transition-colors ml-1 focus:outline-none"><span
-                                className="material-symbols-outlined text-[14px]">close</span></button>
-                        </div>
-                        <div
-                            className="flex items-center gap-1 bg-surface-container border border-primary/30 text-primary px-3 py-1.5 rounded-full font-label-sm text-label-sm">
-                            Players: 3-4
-                            <button className="hover:text-white transition-colors ml-1 focus:outline-none"><span
-                                className="material-symbols-outlined text-[14px]">close</span></button>
                         </div>
                     </div>
                 </div>
@@ -61,13 +45,13 @@ export default function Library() {
                     </div>
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-                   {/*<GameCard*/}
-                   {/*    name="Brass: Birmingham"*/}
-                   {/*    description="Build networks, develop industries, and navigate the industrial revolution in this economic masterpiece."*/}
-                   {/*    peopleCount={{min:2, max:4}}*/}
-                   {/*    duration={120}*/}
-                   {/*    complexity={3.90}*/}
-                   {/*/>*/}
+                    {/*<GameCard*/}
+                    {/*    name="Brass: Birmingham"*/}
+                    {/*    description="Build networks, develop industries, and navigate the industrial revolution in this economic masterpiece."*/}
+                    {/*    peopleCount={{min:2, max:4}}*/}
+                    {/*    duration={120}*/}
+                    {/*    complexity={3.90}*/}
+                    {/*/>*/}
                     <div
                         className="bg-surface rounded-xl overflow-hidden border border-outline-variant/20 relative group card-hover transition-all duration-300 flex flex-col">
                         <div

@@ -1,3 +1,5 @@
+import type {PropsWithChildren} from "react";
+
 type User = {
     name: string;
     role: string;
@@ -12,13 +14,29 @@ type PostProps = {
     time: number;
     likeCount: number;
     commentCount: number;
+    title?: string;
 }
 
-export default function Post({user, message, photoUrl, time, likeCount, commentCount, tags}: PostProps) {
+export default function Post(props: PropsWithChildren<PostProps>) {
+    const {
+        user,
+        message,
+        photoUrl,
+        time,
+        likeCount,
+        commentCount,
+        tags,
+        title,
+        children
+    } = props;
     return (
         <article
             className="bg-surface rounded-xl border border-primary/5 shadow-[0_4px_24px_rgba(18,5,28,0.3)] relative group transition-all duration-300 hover:border-primary/20">
             <div className="absolute inset-0 texture-overlay pointer-events-none rounded-xl"></div>
+            {
+                Boolean(children) &&
+                <div className="absolute z-50 top-0 left-0 w-1 h-full bg-secondary rounded-l-xl"></div>
+            }
             <div className="p-md pb-2 flex items-center justify-between relative z-10">
                 <div className="flex items-center gap-3">
                     <div
@@ -34,6 +52,14 @@ export default function Post({user, message, photoUrl, time, likeCount, commentC
                             <span
                                 className="bg-surface-variant text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-DEFAULT">{user.role}</span>
                         </h3>
+                        {
+                            Boolean(title) &&
+                            <p className="font-body-md text-[13px] text-secondary flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[14px]"
+                                  data-icon="sports_esports">sports_esports</span>
+                                {title}
+                            </p>
+                        }
                         <p className="font-body-md text-[13px] text-on-surface-variant">
                             {time} hours ago
                         </p>
@@ -45,7 +71,7 @@ export default function Post({user, message, photoUrl, time, likeCount, commentC
             </div>
             <div className="px-md py-sm relative z-10">
                 <p className="font-body-md text-body-md text-on-surface/90 leading-relaxed mb-4">
-                    {message}
+                    {children || message}
                 </p>
                 <div
                     className="rounded-lg overflow-hidden border border-surface-variant mb-4 relative aspect-[16/9]">
@@ -57,7 +83,7 @@ export default function Post({user, message, photoUrl, time, likeCount, commentC
                 <div className="flex flex-wrap gap-2 mb-2">
                     {tags.map((tag) => (
                         <span key={tag}
-                            className="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2.5 py-1 rounded-DEFAULT border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-pointer">
+                              className="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2.5 py-1 rounded-DEFAULT border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-pointer">
                             #{tag}
                         </span>
                     ))}

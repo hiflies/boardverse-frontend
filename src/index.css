@@ -1,3 +1,139 @@
+@import "tailwindcss";
+
+@theme{
+    --color-surface-dim: #1b0d25;
+    --color-on-tertiary-fixed: #2c0941;
+    --color-on-surface-variant: #d0c2d3;
+    --color-surface-container-lowest: #160820;
+    --color-inverse-on-surface: #3a2a44;
+    --color-tertiary-fixed-dim: #e2b7f8;
+    --color-on-tertiary: #432158;
+    --color-on-tertiary-fixed-variant: #5b3870;
+    --color-on-tertiary-container: #c79edd;
+    --color-surface-container-low: #24162e;
+    --color-on-primary: #4e0078;
+    --color-surface-container: #281a32;
+    --color-background: #1b0d25;
+    --color-surface-container-high: #33243d;
+    --color-on-primary-fixed-variant: #6a1c99;
+    --color-on-secondary-fixed-variant: #584400;
+    --color-tertiary-container: #55326a;
+    --color-surface-tint: #e4b5ff;
+    --color-surface-container-highest: #3e2f49;
+    --color-on-surface: #f2dbfc;
+    --color-primary-container: #641393;
+    --color-on-secondary-fixed: #241a00;
+    --color-secondary-fixed: #ffe08b;
+    --color-on-secondary: #3d2f00;
+    --color-tertiary: #e2b7f8;
+    --color-outline-variant: #4d4351;
+    --color-on-error: #690005;
+    --color-error-container: #93000a;
+    --color-on-primary-fixed: #2f004b;
+    --color-outline: #998d9d;
+    --color-inverse-surface: #f2dbfc;
+    --color-surface-variant: #3e2f49;
+    --color-secondary: #ffdc7c;
+    --color-inverse-primary: #843ab3;
+    --color-surface: #1b0d25;
+    --color-secondary-fixed-dim: #f1c109;
+    --color-secondary-container: #eebe01;
+    --color-primary-fixed: #f4d9ff;
+    --color-primary: #e4b5ff;
+    --color-on-primary-container: #d592ff;
+    --color-primary-fixed-dim: #e4b5ff;
+    --color-surface-bright: #43334d;
+    --color-on-secondary-container: #634e00;
+    --color-on-error-container: #ffdad6;
+    --color-error: #ffb4ab;
+    --color-on-background: #f2dbfc;
+    --color-tertiary-fixed: #f4d9ff;
+
+    --border-radius-DEFAULT: 0.125rem;
+    --border-radius-lg: 0.25rem;
+    --border-radius-xl: 0.5rem;
+    --border-radius-full: 0.75rem;
+
+
+    --spacing-max-width: 1280px;
+    --spacing-xl: 4rem;
+    --spacing-base: 4px;
+    --spacing-lg: 2.5rem;
+    --spacing-xs: 0.5rem;
+    --spacing-gutter: 24px;
+    --spacing-sm: 1rem;
+    --spacing-margin-mobile: 16px;
+    --spacing-margin-desktop: 48px;
+    --spacing-md: 1.5rem;
+
+    --font-title-lg: Manrope;
+    --font-display-lg-mobile: EB Garamond;
+    --font-body-lg: Manrope;
+    --font-label-md: Geist;
+    --font-label-sm: Geist;
+    --font-headline-md: EB Garamond;
+    --font-display-lg: EB Garamond;
+    --font-headline-sm: EB Garamond;
+    --font-body-md: Manrope;
+}
+
+@utility text-title-lg {
+    font-size: 20px;
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+@utility text-display-lg-mobile {
+    font-size: 36px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@utility text-body-lg {
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+@utility text-label-md {
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+@utility text-label-sm {
+    font-size: 12px;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+}
+
+@utility text-headline-md {
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 500;
+}
+
+@utility text-display-lg {
+    font-size: 48px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+}
+
+@utility text-headline-sm {
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 500;
+}
+
+@utility text-body-md {
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
 html, body {
     margin: 0;
     padding: 0;

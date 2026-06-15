@@ -1,3 +1,5 @@
+import {Link} from "@tanstack/react-router";
+
 export default function Navbar() {
     return (
         <header
@@ -15,12 +17,13 @@ export default function Navbar() {
                 </div>
             </div>
             <div className="flex flex-1 flex-row-reverse items-center gap-sm md:gap-md">
-                <button
+                <Link
+                    to="/profile"
                     className="active:scale-95 transition-transform shrink-0 rounded-full overflow-hidden border-2 border-transparent hover:border-secondary transition-colors">
                     <img alt="User Profile Avatar" className="w-8 h-8 md:w-10 md:h-10 object-cover"
                          data-alt="A close-up portrait of a thoughtful tabletop gamer in a dimly lit, cozy room. The lighting is warm and cinematic, reflecting the high-end hobbyist aesthetic of BoardVerse, with deep shadow contrasts."
                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7xtCa-0e9L88xXOKSIHudImEOXgo7T0KwUb7yMUdGnXY8ITUmhIK_kw-9mbb7tWZoSQM_cERt8Ma_XoBMY_xqEQ9o72oGyFT7DSod0Olnt30zhSfCsmv9EBGbh9vdrDfdAEGnHq8XkR9wF_8-x_h14wmMsoedrfdE8oaxsQZg4oaMc2q75u_uCJtrv6saNcK3FL9rEaFNWfSW0YhfjZg0p9DNyE9h_k4NUZxjhfN6UJMzad4oJKRuKtuV0heLrxHv_I0XXdk3-FE"/>
-                </button>
+                </Link>
                 <button
                     className="relative p-2 text-on-surface-variant hover:text-primary-fixed-dim transition-colors duration-200 active:scale-95 rounded-full hover:bg-surface-variant">
                     <span className="material-symbols-outlined" data-icon="notifications">notifications</span>
