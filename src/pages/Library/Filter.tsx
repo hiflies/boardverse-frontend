@@ -2,10 +2,14 @@ import FilterSection from "./FilterSection.tsx";
 import {useState} from "react";
 import FilterMultipleSelection from "./FilterMultipleSelection.tsx";
 import FilterCategorySelection from "./FilterCategorySelection.tsx";
+import type {Category} from "../../types/Category.ts";
+import {useCategories} from "../../hooks/useCategories.ts";
 
 export default function Filter() {
+    const {data: allCategories, isLoading, isError, error} = useCategories();
     const [playerCount, setPlayerCount] = useState<string[]>([]);
     const [complexity, setComplexity] = useState<string[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     return (
         <aside className="w-full flex flex-col gap-sm px-sm mt-lg">
             <div className="flex items-center justify-between">
@@ -17,7 +21,19 @@ export default function Filter() {
                 </button>
             </div>
             <FilterSection title="Category">
-                <FilterCategorySelection values={[]} selections={[]} onSelectionChange={() => null}/>
+                {isLoading && (
+                    <p className="text-on-surface-variant font-body-xs text-body-xs">Loading categories...</p>
+                )}
+                {isError && (
+                    <p className="text-error font-body-xs text-body-xs">Failed to load categories: {error.message}</p>
+                )}
+                {allCategories && allCategories.length > 0 && (
+                    <FilterCategorySelection
+                        values={allCategories}
+                        selections={categories}
+                        onSelectionChange={setCategories}
+                    />
+                )}
             </FilterSection>
             <FilterSection title="Complexity">
                 <FilterMultipleSelection

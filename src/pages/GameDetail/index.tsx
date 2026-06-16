@@ -7,7 +7,7 @@ export default function GameDetail() {
     const gameId = useParams({from: '/games/$gameId', select: params => params.gameId});
     const {data: game, isLoading, isError, error} = useGame(gameId);
 
-    if (isLoading || isError || !game) {
+    if (isLoading || isError || !game || error) {
         return (
             <div>Loading...</div>
         );
@@ -122,18 +122,16 @@ export default function GameDetail() {
                     <section>
                         <h2 className="text-headline-sm font-headline-sm text-primary mb-md">Mechanics &amp; Theme</h2>
                         <div className="flex flex-wrap gap-3">
-                            <span
-                                className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">Hand Management</span>
-                            <span
-                                className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">Network Building</span>
-                            <span
-                                className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">Loans</span>
-                            <span
-                                className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">Variable Setup</span>
-                            <span
-                                className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">Economic</span>
-                            <span
-                                className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">Industry</span>
+                            {
+                                game.categories.map(category => (
+                                    <span
+                                        key={category.id}
+                                        className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">
+                                        {category.name}
+                                    </span>
+
+                                ))
+                            }
                         </div>
                     </section>
                 </div>
