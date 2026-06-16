@@ -2,7 +2,6 @@ import type {PropsWithChildren} from "react";
 
 type User = {
     name: string;
-    role: string;
     avatarUrl: string;
 }
 
@@ -49,8 +48,6 @@ export default function Post(props: PropsWithChildren<PostProps>) {
                     <div>
                         <h3 className="font-title-lg text-title-lg text-on-surface flex items-center gap-2">
                             {user.name}
-                            <span
-                                className="bg-surface-variant text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-DEFAULT">{user.role}</span>
                         </h3>
                         {
                             Boolean(title) &&
@@ -102,11 +99,6 @@ export default function Post(props: PropsWithChildren<PostProps>) {
                       <span className="material-symbols-outlined group-hover:scale-110 transition-transform"
                             data-icon="chat_bubble">chat_bubble</span>
                     <span className="font-label-md text-label-md">{commentCount} Comments</span>
-                </button>
-                <button
-                    className="flex items-center gap-2 text-on-surface-variant hover:text-primary-fixed transition-colors group ml-auto">
-                      <span className="material-symbols-outlined group-hover:-rotate-12 transition-transform"
-                            data-icon="share">share</span>
                 </button>
             </div>
         </article>

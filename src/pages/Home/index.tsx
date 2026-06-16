@@ -11,7 +11,6 @@ export default function HomePage() {
                 <div className="flex flex-col gap-lg">
                     <Post user={{
                         name: "Marcus Vance",
-                        role: "User",
                         avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZF4DT9-7fR_0LgFpGlP4BoQ43pRapBc45SMaZmjlVQc6kRtK_OWYjW53FCTPDr3Znc4kQ1sRT0oDS2qpylL5cXnQ6rT3QfBSeYHpyZCc9HIdwEKnNPtpeu9kq_Eh2Kbf8fUfeLzQYC9qDJytPWkXNH8kf21KV1D9fYAfIIU-xdKj52mV2LJA-0cyeSsTIflcQ4H-HOnlBEmLM8XjS519mC0jp7mgMWJp8Ri-as_uZGlYIx_2-Y3VRccqtrB9pzO0TWGIVbgObpi0"
                     }}
                           tags={["BrassBirmingham", "ComponentUpgrades"]}
@@ -23,7 +22,6 @@ export default function HomePage() {
                     />
                     <Post user={{
                         name: "Marcus Vance",
-                        role: "User",
                         avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZF4DT9-7fR_0LgFpGlP4BoQ43pRapBc45SMaZmjlVQc6kRtK_OWYjW53FCTPDr3Znc4kQ1sRT0oDS2qpylL5cXnQ6rT3QfBSeYHpyZCc9HIdwEKnNPtpeu9kq_Eh2Kbf8fUfeLzQYC9qDJytPWkXNH8kf21KV1D9fYAfIIU-xdKj52mV2LJA-0cyeSsTIflcQ4H-HOnlBEmLM8XjS519mC0jp7mgMWJp8Ri-as_uZGlYIx_2-Y3VRccqtrB9pzO0TWGIVbgObpi0"
                     }}
                           tags={["BrassBirmingham", "ComponentUpgrades"]}
@@ -38,7 +36,6 @@ export default function HomePage() {
                     </Post>
                     <Post user={{
                         name: "Halime Ucar Turk",
-                        role: "Admin",
                         avatarUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZF4DT9-7fR_0LgFpGlP4BoQ43pRapBc45SMaZmjlVQc6kRtK_OWYjW53FCTPDr3Znc4kQ1sRT0oDS2qpylL5cXnQ6rT3QfBSeYHpyZCc9HIdwEKnNPtpeu9kq_Eh2Kbf8fUfeLzQYC9qDJytPWkXNH8kf21KV1D9fYAfIIU-xdKj52mV2LJA-0cyeSsTIflcQ4H-HOnlBEmLM8XjS519mC0jp7mgMWJp8Ri-as_uZGlYIx_2-Y3VRccqtrB9pzO0TWGIVbgObpi0"
                     }}
                           tags={["budabenimtagim", "ikincisinideyazmamgerekti", "budadeneme"]}
