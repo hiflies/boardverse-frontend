@@ -25,10 +25,10 @@ export default function HomePage() {
                         ))
                     )}
                 </div>
-                <div className="py-lg flex justify-center text-on-surface-variant">
-                <span className="material-symbols-outlined animate-spin"
-                      data-icon="progress_activity">progress_activity</span>
-                </div>
+                {/*<div className="py-lg flex justify-center text-on-surface-variant">*/}
+                {/*<span className="material-symbols-outlined animate-spin"*/}
+                {/*      data-icon="progress_activity">progress_activity</span>*/}
+                {/*</div>*/}
             </div>
         </main>
     );

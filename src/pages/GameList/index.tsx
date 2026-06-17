@@ -44,14 +44,6 @@ export default function GameList() {
                         ))}
                     </div>
                 )}
-                <div className="flex justify-center mt-xl mb-xl">
-                    <button
-                        className="px-8 py-3 rounded-lg border border-primary text-primary hover:bg-primary/10 transition-colors font-label-md text-label-md flex items-center gap-2 group">
-                        Load More Titles
-                        <span
-                            className="material-symbols-outlined group-hover:translate-y-1 transition-transform">expand_more</span>
-                    </button>
-                </div>
             </div>
         </main>
     );
