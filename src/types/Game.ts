@@ -3,19 +3,19 @@ import type {Category} from "./Category.ts";
 export type Game = {
     id: number
     name: string
-    tagline : string
-    description: string
-    categories: Category[]
-    minPlayers : number
-    maxPlayers : number
-    minAge : number
-    releaseYear: number
-    imageUrl : string
-    gameRulesUrl :string
-    averageRating : number
-    votesCount : number
-    duration : string
+    tagline: string
+    categories: Category[];
+    minPlayers: number
+    maxPlayers: number
+    imageUrl: string
+    duration: string
     complexity: number
-    createdAt : string
-    updatedAt: string
-}
+};
+
+export type GameDetails = Game & {
+    averageRating: number
+    gameRulesUrl: string
+    releaseYear: number
+    minAge: number
+    description: string
+};

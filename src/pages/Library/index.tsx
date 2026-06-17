@@ -32,7 +32,7 @@ export default function Library() {
                     <p className="text-on-surface-variant font-body-md text-body-md">Loading games...</p>
                 )}
                 {isError && (
-                    <p className="text-error font-body-md text-body-md">Failed to load games: {error.message}</p>
+                    <p className="text-error font-body-md text-body-md">Failed to load games: {error!.message}</p>
                 )}
                 {games && games.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">

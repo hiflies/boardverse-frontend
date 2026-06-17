@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import {useQuery} from '@tanstack/react-query'
 import {getCategories} from "../api/categories.ts";
 
 export function useCategories() {
@@ -7,4 +7,3 @@ export function useCategories() {
         queryFn: getCategories,
     })
 }
-
