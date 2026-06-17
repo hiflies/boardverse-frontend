@@ -1,14 +1,25 @@
-export default function GameLog(){
+import type {GameLog} from "../../types/GameLog.ts";
+import Markdown from "react-markdown";
+
+type GameLogProps = {
+    gameLog: GameLog;
+    content: string;
+}
+
+export default function GameLog({gameLog, content}: GameLogProps) {
+    const startedAt = new Date(gameLog.startedAt);
+    const finishedAt = new Date(gameLog.finishedAt);
+    const duration = Math.round((finishedAt.getTime() - startedAt.getTime())/60_000);
     return (
         <div
             className="bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-4 mb-4 grid grid-cols-2 gap-4">
             <div className="col-span-2">
-                <h4 className="font-headline-sm text-headline-sm text-on-surface mb-1">Twilight
-                    Imperium: 4th
-                    Edition</h4>
-                <p className="font-body-md text-body-md text-on-surface-variant">Looking for
-                    2 more fearless
-                    leaders to conquer the galaxy. Expecting a full 8-hour session.</p>
+                <h4 className="font-headline-sm text-headline-sm text-on-surface mb-1">
+                    {gameLog.game.name}
+                </h4>
+                <div className="font-body-md text-body-md text-on-surface-variant">
+                    <Markdown>{content}</Markdown>
+                </div>
             </div>
             <div className="flex items-center gap-2 text-on-surface-variant">
                 <div
@@ -18,8 +29,9 @@ export default function GameLog(){
                 </div>
                 <div>
                     <p className="font-label-sm text-label-sm uppercase opacity-70">When</p>
-                    <p className="font-label-md text-label-md text-on-surface">Sat, Nov 12 •
-                        10:00 AM</p>
+                    <p className="font-label-md text-label-md text-on-surface">
+                        {startedAt.toLocaleString()}
+                    </p>
                 </div>
             </div>
             <div className="flex items-center gap-2 text-on-surface-variant">
@@ -30,8 +42,9 @@ export default function GameLog(){
                 </div>
                 <div>
                     <p className="font-label-sm text-label-sm uppercase opacity-70">Duration</p>
-                    <p className="font-label-md text-label-md text-on-surface">3
-                        Hours</p>
+                    <p className="font-label-md text-label-md text-on-surface">
+                        {duration} minutes
+                    </p>
                 </div>
             </div>
             <div className="flex items-center gap-2 text-on-surface-variant">
@@ -42,7 +55,15 @@ export default function GameLog(){
                 </div>
                 <div>
                     <p className="font-label-sm text-label-sm uppercase opacity-70">Players</p>
-                    <p className="font-label-md text-label-md text-on-surface">@Halime, @Ahmet</p>
+                    <p className="font-label-md text-label-md text-on-surface flex flex-column gap-xs">
+                        {
+                            gameLog.players.map((player) => (
+                                <span key={player.id}>
+                                    @{player.username}
+                                </span>
+                            ))
+                        }
+                    </p>
                 </div>
             </div>
         </div>
