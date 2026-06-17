@@ -5,7 +5,7 @@ import {useUIStore} from "../../store/ui.tsx";
 import {useEffect} from "react";
 import Filter from "./Filter.tsx";
 
-export default function Library() {
+export default function GameList() {
     const {data: games, isLoading, isError, error} = useGames();
     const {setSidebarSlot} = useUIStore();
 
