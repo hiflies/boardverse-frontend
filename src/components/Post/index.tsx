@@ -1,14 +1,16 @@
 import type {Post} from "../../types/Post.ts";
 import GameLog from "../GameLog";
 import Markdown from "react-markdown";
-import "react-time-ago/locale/en"
 import ReactTimeAgo from "react-time-ago";
+import {useState} from "react";
+import Comments from "./Comments.tsx";
 
 type PostProps = {
     post: Post
 }
 
 export default function Post({post}: PostProps) {
+    const[isCommentsVisible, setIsCommentsVisible] = useState(false);
     return (
         <article
             className="bg-surface rounded-xl border border-primary/5 shadow-[0_4px_24px_rgba(18,5,28,0.3)] relative group transition-all duration-300 hover:border-primary/20">
@@ -71,12 +73,20 @@ export default function Post({post}: PostProps) {
                     <span className="font-label-md text-label-md">{post.likeCount}</span>
                 </button>
                 <button
+                    onClick={() => setIsCommentsVisible(!isCommentsVisible)}
                     className="flex items-center gap-2 text-on-surface-variant hover:text-primary-fixed transition-colors group">
                       <span className="material-symbols-outlined group-hover:scale-110 transition-transform"
                             data-icon="chat_bubble">chat_bubble</span>
-                    <span className="font-label-md text-label-md">{post.commentCount} Comments</span>
+                    <span className="font-label-md text-label-md">
+                        {post.commentCount>0 ? `${post.commentCount} Comments` : 'Write a comment'}
+                    </span>
                 </button>
             </div>
+            {
+                isCommentsVisible && (
+                   <Comments post={post}/>
+                )
+            }
         </article>
     )
 }
