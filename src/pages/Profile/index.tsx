@@ -1,9 +1,21 @@
 import {useProfile} from "../../hooks/useProfile.ts";
-import {profileRoute} from "../../router.tsx";
+import {loginRoute, profileRoute} from "../../router.tsx";
+import {useIsAuthenticated} from "../../store/auth.ts";
+import {useEffect} from "react";
+import ProfilePhoto from "../../components/ProfilePhoto";
 
 export default function Profile() {
     const username = profileRoute.useParams({select: params => params.username});
-    const {data: me, isLoading} = useProfile(username ?? 'me')
+    const isAuthenticated = useIsAuthenticated();
+    const isEnabled = Boolean(username) || isAuthenticated;
+    const {data: user, isLoading} = useProfile(username ?? 'me', isEnabled);
+    const navigate = loginRoute.useNavigate();
+
+    useEffect(() => {
+        if (!isEnabled) {
+            navigate({});
+        }
+    }, [isEnabled, navigate]);
 
     return (
         <main className="flex-1 lg:ml-80 w-full">
@@ -15,23 +27,16 @@ export default function Profile() {
                 </button>
             </div>
             <div className="p-margin-mobile md:p-margin-desktop space-y-xl max-w-6xl mx-auto pb-32 md:pb-xl pt-lg">
-                {!isLoading && me && (
+                {!isLoading && user && (
                     <section className="flex items-center gap-md">
-                        {me.avatarUrl ? (
-                            <img
-                                src={me.avatarUrl}
-                                alt={me.username}
-                                className="w-16 h-16 rounded-full border-2 border-primary/30 object-cover"
-                            />
-                        ) : (
-                            <div
-                                className="w-16 h-16 rounded-full bg-surface-container border-2 border-primary/30 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-primary text-3xl">account_circle</span>
-                            </div>
-                        )}
+                        <ProfilePhoto
+                            src={user.avatarUrl}
+                            alt={user.username}
+                            className="w-16 h-16 rounded-full border-2 border-primary/30 object-cover"
+                        />
                         <div>
-                            <p className="font-headline-md text-headline-md text-on-surface">{me.username}</p>
-                            <p className="font-label-md text-label-md text-on-surface-variant">{me.profileText}</p>
+                            <p className="font-headline-md text-headline-md text-on-surface">{user.username}</p>
+                            <p className="font-label-md text-label-md text-on-surface-variant">{user.profileText}</p>
                         </div>
                     </section>
                 )}

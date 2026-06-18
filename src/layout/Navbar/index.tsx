@@ -1,7 +1,16 @@
 import {Link} from "@tanstack/react-router";
-import {profileRoute} from "../../router.tsx";
+import {loginRoute, profileRoute} from "../../router.tsx";
+import {useAuthStore, useIsAuthenticated} from "../../store/auth.ts";
+import {useProfile} from "../../hooks/useProfile.ts";
+import ProfilePhoto from "../../components/ProfilePhoto";
 
 export default function Navbar() {
+    const authStore = useAuthStore();
+
+    const isAuthenticated = useIsAuthenticated();
+    const logout = authStore.clearAuth;
+    const {data: user} = useProfile('me')
+
     return (
         <header
             className="w-full flex justify-between items-center px-md py-xs mx-auto shadow-sm docked full-width top-0">
@@ -18,23 +27,36 @@ export default function Navbar() {
                 </div>
             </div>
             <div className="flex flex-1 flex-row-reverse items-center gap-sm md:gap-md">
-                <Link
-                    to={profileRoute.fullPath}
-                    className="active:scale-95 transition-transform shrink-0 rounded-full overflow-hidden border-2 border-transparent hover:border-secondary transition-colors">
-                    <img alt="User Profile Avatar" className="w-8 h-8 md:w-10 md:h-10 object-cover"
-                         data-alt="A close-up portrait of a thoughtful tabletop gamer in a dimly lit, cozy room. The lighting is warm and cinematic, reflecting the high-end hobbyist aesthetic of BoardVerse, with deep shadow contrasts."
-                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7xtCa-0e9L88xXOKSIHudImEOXgo7T0KwUb7yMUdGnXY8ITUmhIK_kw-9mbb7tWZoSQM_cERt8Ma_XoBMY_xqEQ9o72oGyFT7DSod0Olnt30zhSfCsmv9EBGbh9vdrDfdAEGnHq8XkR9wF_8-x_h14wmMsoedrfdE8oaxsQZg4oaMc2q75u_uCJtrv6saNcK3FL9rEaFNWfSW0YhfjZg0p9DNyE9h_k4NUZxjhfN6UJMzad4oJKRuKtuV0heLrxHv_I0XXdk3-FE"/>
-                </Link>
-                <button
-                    className="relative p-2 text-on-surface-variant hover:text-primary-fixed-dim transition-colors duration-200 active:scale-95 rounded-full hover:bg-surface-variant">
-                    <span className="material-symbols-outlined" data-icon="notifications">notifications</span>
-                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
-                </button>
-                <button
-                    className="hidden md:flex items-center gap-2 bg-primary-container text-on-primary-container px-4 py-2 rounded-DEFAULT font-label-md text-label-md hover:bg-on-primary-fixed hover:text-primary-fixed transition-all border border-transparent hover:border-primary-fixed/20 shadow-sm active:scale-95">
-                    <span className="material-symbols-outlined text-[18px]" data-icon="add_box">add_box</span>
-                    Create Post
-                </button>
+
+                {isAuthenticated ? (
+                    <>
+                        <button
+                            onClick={logout}
+                            className="hidden md:flex items-center gap-2 bg-primary-container text-on-primary-container px-4 py-2 rounded-DEFAULT font-label-md text-label-md hover:bg-on-primary-fixed hover:text-primary-fixed transition-all border border-transparent hover:border-primary-fixed/20 shadow-sm active:scale-95">
+                            <span className="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+                            Logout
+                        </button>
+                        <Link
+                            to={profileRoute.fullPath}
+                            className="active:scale-95 transition-transform shrink-0 rounded-full overflow-hidden border-2 border-transparent hover:border-secondary transition-colors">
+                            <ProfilePhoto
+                                className="w-8 h-8 md:w-10 md:h-10 object-cover"
+                                src={user?.avatarUrl}/>
+                        </Link>
+                        <button
+                            className="relative p-2 text-on-surface-variant hover:text-primary-fixed-dim transition-colors duration-200 active:scale-95 rounded-full hover:bg-surface-variant">
+                            <span className="material-symbols-outlined" data-icon="notifications">notifications</span>
+                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+                        </button>
+                    </>
+                ) : (
+                    <Link
+                        to={loginRoute.fullPath}
+                        className="hidden md:flex items-center gap-2 bg-primary-container text-on-primary-container px-4 py-2 rounded-DEFAULT font-label-md text-label-md hover:bg-on-primary-fixed hover:text-primary-fixed transition-all border border-transparent hover:border-primary-fixed/20 shadow-sm active:scale-95">
+                        <span className="material-symbols-outlined text-[18px]" data-icon="login">login</span>
+                        Login
+                    </Link>
+                )}
             </div>
         </header>
     );

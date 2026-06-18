@@ -1,6 +1,9 @@
 import type {Post} from "../../types/Post.ts";
 import {useComments} from "../../hooks/usePosts.ts";
 import ReactTimeAgo from "react-time-ago";
+import ProfilePhoto from "../ProfilePhoto";
+import {Link} from "@tanstack/react-router";
+import {profileRoute} from "../../router.tsx";
 
 type CommentsProps = {
     post: Post;
@@ -36,14 +39,22 @@ export default function Comments({post}: CommentsProps) {
                         <div
                             key={comment.id}
                             className="px-md py-3 flex gap-3 group/comment hover:bg-surface-container-lowest/30 transition-colors">
-                            <img
-                                className="w-8 h-8 rounded-full object-cover shrink-0 border border-outline-variant/30 mt-0.5"
-                                src={comment.user.avatarUrl}/>
+                            <Link
+                                to={profileRoute.fullPath}
+                                params={{username: comment.user.username}}
+                            >
+                                <ProfilePhoto
+                                    className="w-8 h-8 rounded-full object-cover shrink-0 border border-outline-variant/30 mt-0.5"
+                                    src={comment.user.avatarUrl}/>
+                            </Link>
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-baseline gap-2 mb-0.5">
-                                    <span className="font-label-md text-label-md text-on-surface">
+                                    <Link
+                                        to={profileRoute.fullPath}
+                                        params={{username: comment.user.username}}
+                                        className="font-label-md text-label-md text-on-surface">
                                         {comment.user.username}
-                                    </span>
+                                    </Link>
                                     <span className="font-label-sm text-[11px] text-on-surface-variant">
                                         <ReactTimeAgo date={new Date(comment.createdAt)} locale="en"/>
                                     </span>

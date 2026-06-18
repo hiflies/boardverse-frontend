@@ -8,8 +8,9 @@ type GameCardProps = {
 
 export default function GameCard({game}: GameCardProps) {
     return (
-        <Link to={gameDetailRoute.fullPath} params={{ gameId: game.id.toString() }}
-            className="bg-surface rounded-xl overflow-hidden border border-outline-variant/20 relative group card-hover transition-all duration-300 flex flex-col">
+        <Link to={gameDetailRoute.fullPath}
+              params={{ gameId: game.id.toString() }}
+              className="bg-surface rounded-xl overflow-hidden border border-outline-variant/20 relative group card-hover transition-all duration-300 flex flex-col">
             <div
                 className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none"></div>
             <div className="linen-texture absolute inset-0 pointer-events-none rounded-xl"></div>

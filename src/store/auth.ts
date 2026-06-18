@@ -22,3 +22,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         set({token: null})
     },
 }))
+
+export const useIsAuthenticated = () => {
+    return Boolean(useAuthStore(a => a.token));
+}
