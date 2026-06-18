@@ -1,10 +1,9 @@
-import {useParams} from "@tanstack/react-router";
 import {useGame} from "../../hooks/useGames.ts";
 import Markdown from "react-markdown";
+import {gameDetailRoute} from "../../router.tsx";
 
 export default function GameDetail() {
-
-    const gameId = useParams({from: '/games/$gameId', select: params => params.gameId});
+    const gameId = gameDetailRoute.useParams({select: params => params.gameId});
     const {data: game, isLoading, isError, error} = useGame(gameId);
 
     if (isLoading || isError || !game || error) {

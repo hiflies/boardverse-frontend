@@ -22,37 +22,37 @@ const authLayoutRoute = createRoute({
     component: AuthLayout,
 })
 
-const indexRoute = createRoute({
+export const indexRoute = createRoute({
     getParentRoute: () => mainLayoutRoute,
     path: '/',
     component: HomePage,
 })
 
-const gameListRoute = createRoute({
+export const gameListRoute = createRoute({
     getParentRoute: () => mainLayoutRoute,
     path: '/games',
     component: GameList,
 })
 
-const gameDetailRoute = createRoute({
+export const gameDetailRoute = createRoute({
     getParentRoute: () => mainLayoutRoute,
     path: '/games/$gameId',
     component: GameDetail,
 })
 
-const profileRoute = createRoute({
+export const profileRoute = createRoute({
     getParentRoute: () => mainLayoutRoute,
-    path: '/profile',
+    path: `/profile/{-$username}`,
     component: Profile,
 })
 
-const loginRoute = createRoute({
+export const loginRoute = createRoute({
     getParentRoute: () => authLayoutRoute,
     path: '/login',
     component: LoginPage,
 })
 
-const registerRoute = createRoute({
+export const registerRoute = createRoute({
     getParentRoute: () => authLayoutRoute,
     path: '/register',
     component: RegisterPage,

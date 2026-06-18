@@ -1,5 +1,6 @@
 import type {Game} from "../../types/Game.ts";
 import {Link} from "@tanstack/react-router";
+import {gameDetailRoute} from "../../router.tsx";
 
 type GameCardProps = {
     game: Game;
@@ -7,7 +8,7 @@ type GameCardProps = {
 
 export default function GameCard({game}: GameCardProps) {
     return (
-        <Link to="/games/$gameId" params={{ gameId: game.id.toString() }}
+        <Link to={gameDetailRoute.fullPath} params={{ gameId: game.id.toString() }}
             className="bg-surface rounded-xl overflow-hidden border border-outline-variant/20 relative group card-hover transition-all duration-300 flex flex-col">
             <div
                 className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none"></div>

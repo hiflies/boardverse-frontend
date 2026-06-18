@@ -1,4 +1,10 @@
+import {useProfile} from "../../hooks/useProfile.ts";
+import {profileRoute} from "../../router.tsx";
+
 export default function Profile() {
+    const username = profileRoute.useParams({select: params => params.username});
+    const {data: me, isLoading} = useProfile(username ?? 'me')
+
     return (
         <main className="flex-1 lg:ml-80 w-full">
             <div
@@ -9,6 +15,26 @@ export default function Profile() {
                 </button>
             </div>
             <div className="p-margin-mobile md:p-margin-desktop space-y-xl max-w-6xl mx-auto pb-32 md:pb-xl pt-lg">
+                {!isLoading && me && (
+                    <section className="flex items-center gap-md">
+                        {me.avatarUrl ? (
+                            <img
+                                src={me.avatarUrl}
+                                alt={me.username}
+                                className="w-16 h-16 rounded-full border-2 border-primary/30 object-cover"
+                            />
+                        ) : (
+                            <div
+                                className="w-16 h-16 rounded-full bg-surface-container border-2 border-primary/30 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-primary text-3xl">account_circle</span>
+                            </div>
+                        )}
+                        <div>
+                            <p className="font-headline-md text-headline-md text-on-surface">{me.username}</p>
+                            <p className="font-label-md text-label-md text-on-surface-variant">{me.profileText}</p>
+                        </div>
+                    </section>
+                )}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
                     <div className="lg:col-span-8 space-y-xl">
                         <section>

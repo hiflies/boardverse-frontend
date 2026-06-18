@@ -1,4 +1,5 @@
 import {Link} from "@tanstack/react-router";
+import {profileRoute} from "../../router.tsx";
 
 export default function Navbar() {
     return (
@@ -18,7 +19,7 @@ export default function Navbar() {
             </div>
             <div className="flex flex-1 flex-row-reverse items-center gap-sm md:gap-md">
                 <Link
-                    to="/profile"
+                    to={profileRoute.fullPath}
                     className="active:scale-95 transition-transform shrink-0 rounded-full overflow-hidden border-2 border-transparent hover:border-secondary transition-colors">
                     <img alt="User Profile Avatar" className="w-8 h-8 md:w-10 md:h-10 object-cover"
                          data-alt="A close-up portrait of a thoughtful tabletop gamer in a dimly lit, cozy room. The lighting is warm and cinematic, reflecting the high-end hobbyist aesthetic of BoardVerse, with deep shadow contrasts."
