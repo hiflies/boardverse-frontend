@@ -1,4 +1,9 @@
+import {useProfile} from "../../hooks/useProfile.ts";
+import ProfilePhoto from "../ProfilePhoto";
+
 export default function CreatePost() {
+    const {data: user} = useProfile();
+
     return (
         <section
             className="bg-surface rounded-xl border border-primary/10 shadow-[0_8px_32px_rgba(18,5,28,0.4)] relative group">
@@ -27,10 +32,9 @@ export default function CreatePost() {
             </div>
             <div className="p-md relative z-10 flex flex-col gap-md">
                 <div className="flex gap-sm items-start">
-                    <img alt="Avatar"
+                    <ProfilePhoto
                          className="w-10 h-10 rounded-full object-cover shrink-0 border border-surface-variant"
-                         data-alt="User avatar matching the top nav, depicting a thoughtful gamer in warm cinematic lighting, consistent with the premium BoardVerse aesthetic."
-                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9m95bEOlG85BWnX6KCh1L0knUp9s5D6WVT3NdMnjt3Pqs-sveBHtskxvdcFshmz25z4DV76vQ5SpmPDrczz2uSOjUa-OZk-AP08HoG7qUsVep-uRewYF8Umk55SMxMQNfTQERPFjd_eZqij-rogXnRY0KN4usDBmEOl-AYW5QhzVE0xWo2Pyj--OTTQaC0AZsLfiNs2V4N2MNEQlx8Fnp1INLivV5c3lPYdcu6jUjwCsjerjVLAf0a1NIoOjv8SjKNALBNgd5aYY"/>
+                         src={user?.avatarUrl}/>
                     <div className="flex-1">
                       <textarea
                           className="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md border-0 border-b border-surface-variant focus:border-secondary focus:ring-0 resize-none p-3 rounded-t-DEFAULT placeholder:text-on-surface-variant/40 transition-colors"

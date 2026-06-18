@@ -3,23 +3,23 @@ import type {AuthResponse} from '../types/Auth.ts'
 
 type AuthStore = {
     token: string | null
+    username: string | null
     setAuth: (response: AuthResponse) => void
-    clearAuth: () => void
-}
-
-function loadFromStorage(): string | null {
-    return localStorage.getItem('token');
+    logout: () => void
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
-    token: loadFromStorage(),
+    token: localStorage.getItem('token'),
+    username: localStorage.getItem('username'),
     setAuth: (response) => {
         localStorage.setItem('token', response.token)
-        set({token: response.token})
+        localStorage.setItem('username', response.username)
+        set({token: response.token, username: response.username})
     },
-    clearAuth: () => {
+    logout: () => {
         localStorage.removeItem('token')
-        set({token: null})
+        localStorage.removeItem('username')
+        set({token: null, username: null})
     },
 }))
 

@@ -8,7 +8,7 @@ export default function Profile() {
     const username = profileRoute.useParams({select: params => params.username});
     const isAuthenticated = useIsAuthenticated();
     const isEnabled = Boolean(username) || isAuthenticated;
-    const {data: user, isLoading} = useProfile(username ?? 'me', isEnabled);
+    const {data: user, isLoading} = useProfile(username, isEnabled);
     const navigate = loginRoute.useNavigate();
 
     useEffect(() => {

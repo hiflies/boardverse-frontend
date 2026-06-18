@@ -5,11 +5,10 @@ import {useProfile} from "../../hooks/useProfile.ts";
 import ProfilePhoto from "../../components/ProfilePhoto";
 
 export default function Navbar() {
-    const authStore = useAuthStore();
+    const logout = useAuthStore(auth => auth.logout);
 
     const isAuthenticated = useIsAuthenticated();
-    const logout = authStore.clearAuth;
-    const {data: user} = useProfile('me')
+    const {data: user} = useProfile();
 
     return (
         <header
