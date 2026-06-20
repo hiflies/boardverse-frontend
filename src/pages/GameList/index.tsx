@@ -2,18 +2,39 @@ import GameCard from "../../components/GameCard";
 import {useGames} from "../../hooks/useGames";
 import "./style.css";
 import {useUIStore} from "../../store/ui.tsx";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import Filter from "./Filter.tsx";
+import {useSearch} from "@tanstack/react-router";
+import {gameListRoute} from "../../router.tsx";
 
 export default function GameList() {
-    const {data: games, isLoading, isError, error} = useGames();
+    const search = useSearch({from: gameListRoute.id})
+    const {data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage} = useGames(search)
     const {setSidebarSlot} = useUIStore();
+    const sentinelRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         setSidebarSlot(<Filter/>);
-
         return () => setSidebarSlot(null);
     }, [setSidebarSlot]);
+
+    useEffect(() => {
+        const sentinel = sentinelRef.current
+        if (!sentinel) return
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage()
+                }
+            },
+            {rootMargin: '200px'},
+        )
+        observer.observe(sentinel)
+        return () => observer.disconnect()
+    }, [fetchNextPage, hasNextPage, isFetchingNextPage])
+
+    const allItems = data?.pages.flatMap(p => p.items) ?? []
+    const totalCount = data?.pages[0]?.totalCount ?? 0
 
     return (
         <main className="flex-1 flex flex-col md:flex-row w-full max-w-max-width mx-auto">
@@ -23,8 +44,11 @@ export default function GameList() {
                         <div>
                             <h1 className="font-display-lg md:text-display-lg text-display-lg-mobile font-bold text-on-background">Explore
                                 Library</h1>
-                            <p className="text-on-surface-variant mt-2 font-body-lg text-body-lg">Showing 142 premium
-                                titles matching your criteria.</p>
+                            {data && (
+                                <p className="text-on-surface-variant mt-2 font-body-lg text-body-lg">
+                                    Showing {allItems.length} of {totalCount} titles.
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -34,15 +58,22 @@ export default function GameList() {
                 {isError && (
                     <p className="text-error font-body-md text-body-md">Failed to load games: {error.message}</p>
                 )}
-                {games && games.length > 0 && (
+                {allItems.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-                        {games.map((game) => (
+                        {allItems.map((game) => (
                             <GameCard
                                 key={game.id}
                                 game={game}
                             />
                         ))}
                     </div>
+                )}
+                {data && allItems.length === 0 && !isLoading && (
+                    <p className="text-on-surface-variant font-body-md text-body-md">No games match your filters.</p>
+                )}
+                <div ref={sentinelRef}/>
+                {isFetchingNextPage && (
+                    <p className="text-on-surface-variant font-body-md text-body-md text-center py-lg">Loading more...</p>
                 )}
             </div>
         </main>

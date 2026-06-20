@@ -1,14 +1,41 @@
-import {Link} from "@tanstack/react-router";
-import {loginRoute, profileRoute} from "../../router.tsx";
+import {Link, useLocation} from "@tanstack/react-router";
+import {gameListRoute, loginRoute, profileRoute} from "../../router.tsx";
 import {useAuthStore, useIsAuthenticated} from "../../store/auth.ts";
 import {useProfile} from "../../hooks/useProfile.ts";
 import ProfilePhoto from "../../components/ProfilePhoto";
+import {useEffect, useState} from "react";
+import useDebounce from "../../hooks/useDebounce.ts";
 
 export default function Navbar() {
     const logout = useAuthStore(auth => auth.logout);
-
     const isAuthenticated = useIsAuthenticated();
     const {data: user} = useProfile();
+    const location = useLocation();
+    const navigate = gameListRoute.useNavigate();
+
+    const [nameInput, setNameInput] = useState(location.search.name ?? undefined)
+
+    useDebounce(() => {
+        if ((!nameInput && !location.pathname.includes('/games')) || nameInput === undefined) {
+            return;
+        }
+
+        navigate({
+            search: prev => ({
+                ...prev,
+                name: nameInput || undefined,
+            })
+        })
+    }, 500, [nameInput])
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setNameInput(location.search.name ?? '');
+
+        console.log('change', location.search.name);
+    }, [location.search.name]);
+
+    console.log('name', location.search.name);
 
     return (
         <header
@@ -21,8 +48,10 @@ export default function Navbar() {
                   className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-secondary transition-colors"
                   data-icon="search">search</span>
                     <input
+                        value={nameInput ?? ''}
+                        onChange={e => setNameInput(e.target.value)}
                         className="w-full bg-surface-container-low text-on-surface border-b border-surface-variant focus:border-secondary pl-10 pr-4 py-2 rounded-t-DEFAULT focus:outline-none focus:ring-0 transition-colors font-body-md text-body-md placeholder:text-on-surface-variant/50"
-                        placeholder="Search games, players, groups..." type="text"/>
+                        placeholder="Search games" type="text"/>
                 </div>
             </div>
             <div className="flex flex-1 flex-row-reverse items-center gap-sm md:gap-md">

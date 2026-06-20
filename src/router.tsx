@@ -7,6 +7,7 @@ import MainLayout from "./layout/MainLayout";
 import GameList from "./pages/GameList";
 import RegisterPage from "./pages/RegisterPage";
 import AuthLayout from "./layout/AuthLayout";
+import type { GameListSearchParams } from "./types/GameListSearchParams";
 
 const rootRoute = createRootRoute()
 
@@ -32,6 +33,15 @@ export const gameListRoute = createRoute({
     getParentRoute: () => mainLayoutRoute,
     path: '/games',
     component: GameList,
+    validateSearch: (search: Record<string, unknown>) => ({
+        name: typeof search.name === 'string' ? search.name : undefined,
+        categories: Array.isArray(search.categories) ? (search.categories as number[]) : undefined,
+        minComplexity: typeof search.minComplexity === 'number' ? search.minComplexity : undefined,
+        maxComplexity: typeof search.maxComplexity === 'number' ? search.maxComplexity : undefined,
+        playerCount: typeof search.playerCount === 'number' ? search.playerCount : undefined,
+        minRating: typeof search.minRating === 'number' ? search.minRating : undefined,
+        maxRating: typeof search.maxRating === 'number' ? search.maxRating : undefined,
+    }) as GameListSearchParams,
 })
 
 export const gameDetailRoute = createRoute({
