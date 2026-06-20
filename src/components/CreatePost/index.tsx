@@ -1,17 +1,20 @@
 import {type ChangeEvent, useRef, useState} from "react";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 import {useProfile} from "../../hooks/useProfile.ts";
 import ProfilePhoto from "../ProfilePhoto";
 import clsx from "clsx";
 import {createPost} from "../../api/posts.ts";
 
-export default function CreatePost() {
+type CreatePostProps ={
+    refetch: () => void;
+}
+
+export default function CreatePost({refetch}: CreatePostProps) {
     const {data: user} = useProfile();
     const [content, setContent] = useState('');
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const queryClient = useQueryClient();
 
     const mutation = useMutation({
         mutationFn: () => {
@@ -19,7 +22,7 @@ export default function CreatePost() {
             return createPost(content, hashtags, image);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['posts']});
+            refetch();
             setContent('');
             setImage(null);
             setPreviewUrl(null);

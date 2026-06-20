@@ -4,14 +4,14 @@ import {usePosts} from "../../hooks/usePosts.ts";
 import {useIsAuthenticated} from "../../store/auth.ts";
 
 export default function HomePage() {
-    const {data: posts, isLoading, isError, error} = usePosts();
+    const {data: posts, isLoading, isError, error, refetch} = usePosts();
     const isAuthenticated = useIsAuthenticated();
 
     return (
         <main
             className="flex-1 w-full px-margin-mobile md:px-margin-desktop py-md md:py-lg flex justify-center">
             <div className="w-full max-w-2xl flex flex-col gap-lg">
-                {isAuthenticated && <CreatePost/>}
+                {isAuthenticated && <CreatePost refetch={refetch}/>}
                 <div className="flex flex-col gap-lg">
                     {isLoading && (
                         <p className="text-on-surface-variant font-body-md text-body-md">Loading posts...</p>
