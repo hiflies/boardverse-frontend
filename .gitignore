@@ -1,3 +1,9 @@
 .idea/
 node_modules/
 dist/
+public/avatars/*
+public/games/*
+public/posts/*
+!public/avatars/.gitkeep
+!public/games/.gitkeep
+!public/posts/.gitkeep

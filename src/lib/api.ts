@@ -14,7 +14,7 @@ export function rawApiFetch(path: string, init?: RequestInit) {
     const token = localStorage.getItem('token')
     return fetch(`${API_BASE_URL}${path}`, {
         headers: {
-            'Content-Type': 'application/json',
+            ...(!(init?.body instanceof FormData) ? {'Content-Type': 'application/json'} : {}),
             ...(token ? {Authorization: `Bearer ${token}`} : {}),
             ...init?.headers,
         },

@@ -8,21 +8,53 @@ type AuthStore = {
     logout: () => void
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
-    token: localStorage.getItem('token'),
-    username: localStorage.getItem('username'),
-    setAuth: (response) => {
-        localStorage.setItem('token', response.token)
-        localStorage.setItem('username', response.username)
-        set({token: response.token, username: response.username})
-    },
-    logout: () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('username')
-        set({token: null, username: null})
-    },
-}))
+export const useAuthStore = create<AuthStore>((set) => {
+    const {token, username} = loadFromLocalStorage();
+    return {
+        token,
+        username,
+        setAuth: (response) => {
+            localStorage.setItem('token', response.token)
+            set({token: response.token, username: response.username})
+        },
+        logout: () => {
+            localStorage.removeItem('token')
+            set({token: null, username: null})
+        },
+    };
+})
 
 export const useIsAuthenticated = () => {
     return Boolean(useAuthStore(a => a.token));
+}
+
+function loadFromLocalStorage() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        return {token: null, username: null};
+    }
+
+    const rawUserData = token.split('.')[1];
+    if (!rawUserData) {
+        return {token: null, username: null};
+    }
+
+    const userData = atob(rawUserData);
+    if (!userData) {
+        return {token: null, username: null};
+    }
+
+    const user = JSON.parse(userData);
+    if (!user) {
+        return {token: null, username: null};
+    }
+
+    if (new Date(user.exp * 1000).getTime() < new Date().getTime()) {
+        return {token: null, username: null};
+    }
+
+    return {
+        token,
+        username: user.unique_name,
+    }
 }

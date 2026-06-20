@@ -1,13 +1,31 @@
 import {type ChangeEvent, useRef, useState} from "react";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {useProfile} from "../../hooks/useProfile.ts";
 import ProfilePhoto from "../ProfilePhoto";
 import clsx from "clsx";
+import {createPost} from "../../api/posts.ts";
 
 export default function CreatePost() {
     const {data: user} = useProfile();
+    const [content, setContent] = useState('');
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: () => {
+            const hashtags = [...content.matchAll(/#(\w+)/g)].map(m => m[1]);
+            return createPost(content, hashtags, image);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['posts']});
+            setContent('');
+            setImage(null);
+            setPreviewUrl(null);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        },
+    });
 
     function handleImageSelect(e: ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0] ?? null;
@@ -56,7 +74,9 @@ export default function CreatePost() {
                       <textarea
                           className="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md border-0 border-b border-surface-variant focus:border-secondary focus:ring-0 resize-none p-3 rounded-t-DEFAULT placeholder:text-on-surface-variant/40 transition-colors"
                           placeholder="Share your latest tabletop thoughts, strategies, or questions..."
-                          rows={3}></textarea>
+                          rows={3}
+                          value={content}
+                          onChange={e => setContent(e.target.value)}></textarea>
                         {previewUrl && (
                             <div className="relative mt-2 rounded-lg overflow-hidden border border-surface-variant">
                                 <img src={previewUrl} alt="Preview" className="w-full max-h-60 object-cover"/>
@@ -97,8 +117,10 @@ export default function CreatePost() {
                         </button>
                     </div>
                     <button
-                        className="bg-primary-container text-on-primary-container font-label-md text-label-md px-6 py-2 rounded-DEFAULT hover:bg-on-primary-fixed hover:text-primary-fixed transition-all border border-transparent hover:border-primary-fixed/20 shadow-sm active:scale-95 flex items-center gap-2">
-                        Post
+                        onClick={() => mutation.mutate()}
+                        disabled={mutation.isPending || !content.trim()}
+                        className="bg-primary-container text-on-primary-container font-label-md text-label-md px-6 py-2 rounded-DEFAULT hover:bg-on-primary-fixed hover:text-primary-fixed transition-all border border-transparent hover:border-primary-fixed/20 shadow-sm active:scale-95 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        {mutation.isPending ? 'Posting...' : 'Post'}
                         <span className="material-symbols-outlined text-[16px]"
                               data-icon="send">send</span>
                     </button>

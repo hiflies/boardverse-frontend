@@ -3,30 +3,45 @@ import {useComments} from "../../hooks/usePosts.ts";
 import ReactTimeAgo from "react-time-ago";
 import ProfilePhoto from "../ProfilePhoto";
 import {Link} from "@tanstack/react-router";
-import {profileRoute} from "../../router.tsx";
+import {loginRoute, profileRoute} from "../../router.tsx";
+import {useProfile} from "../../hooks/useProfile.ts";
+import {useIsAuthenticated} from "../../store/auth.ts";
+import {useEffect} from "react";
 
 type CommentsProps = {
     post: Post;
 }
 
 export default function Comments({post}: CommentsProps) {
+    const isAuthenticated = useIsAuthenticated();
+    const {data: user} = useProfile(undefined, isAuthenticated);
     const {data: comments, isLoading, isError, error} = useComments(post.id.toString());
+    const navigate = loginRoute.useNavigate();
+
+    useEffect(() => {
+        if (!isLoading && !isAuthenticated && comments!.length === 0) {
+            navigate({});
+        }
+    }, [comments, isAuthenticated, isLoading, navigate]);
+
     return (
         <div className="relative z-10 border-t border-surface-variant">
-            <div className="px-md py-3 flex gap-3 items-start border-b border-surface-variant/50">
-                <img alt="Your avatar"
-                     className="w-8 h-8 rounded-full object-cover shrink-0 border border-surface-variant mt-0.5"
-                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9m95bEOlG85BWnX6KCh1L0knUp9s5D6WVT3NdMnjt3Pqs-sveBHtskxvdcFshmz25z4DV76vQ5SpmPDrczz2uSOjUa-OZk-AP08HoG7qUsVep-uRewYF8Umk55SMxMQNfTQERPFjd_eZqij-rogXnRY0KN4usDBmEOl-AYW5QhzVE0xWo2Pyj--OTTQaC0AZsLfiNs2V4N2MNEQlx8Fnp1INLivV5c3lPYdcu6jUjwCsjerjVLAf0a1NIoOjv8SjKNALBNgd5aYY"/>
-                <div className="flex-1 flex gap-2 items-center">
-                    <input
-                        className="flex-1 bg-surface-container-low text-on-surface font-body-md text-[14px] border-b border-surface-variant focus:border-secondary focus:outline-none px-3 py-2 rounded-t-DEFAULT placeholder:text-on-surface-variant/40 transition-colors"
-                        placeholder="Write a comment..." type="text"/>
-                    <button
-                        className="p-2 text-on-surface-variant hover:text-secondary transition-colors shrink-0">
-                        <span className="material-symbols-outlined text-[20px]" data-icon="send">send</span>
-                    </button>
+            {isAuthenticated && (
+                <div className="px-md py-3 flex gap-3 items-start border-b border-surface-variant/50">
+                    <ProfilePhoto
+                        className="w-8 h-8 rounded-full object-cover shrink-0 border border-surface-variant mt-0.5"
+                        src={user!.avatarUrl}/>
+                    <div className="flex-1 flex gap-2 items-center">
+                        <input
+                            className="flex-1 bg-surface-container-low text-on-surface font-body-md text-[14px] border-b border-surface-variant focus:border-secondary focus:outline-none px-3 py-2 rounded-t-DEFAULT placeholder:text-on-surface-variant/40 transition-colors"
+                            placeholder="Write a comment..." type="text"/>
+                        <button
+                            className="p-2 text-on-surface-variant hover:text-secondary transition-colors shrink-0">
+                            <span className="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            )}
             <div className="divide-y divide-surface-variant/40">
                 {isLoading && (
                     <p className="text-on-surface-variant font-body-md text-body-md">Loading comments...</p>
