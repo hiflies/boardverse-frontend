@@ -8,13 +8,30 @@ import ProfilePhoto from "../ProfilePhoto";
 import {Link} from "@tanstack/react-router";
 import {profileRoute} from "../../router.tsx";
 import clsx from "clsx";
+import {useMutation} from "@tanstack/react-query";
+import {deletePost} from "../../api/posts.ts";
+import {useIsAuthenticated} from "../../store/auth.ts";
+import {useProfile} from "../../hooks/useProfile.ts";
 
 type PostProps = {
     post: Post
+    refetch: () => void;
 }
 
-export default function Post({post}: PostProps) {
+export default function Post({post, refetch}: PostProps) {
     const [isCommentsVisible, setIsCommentsVisible] = useState(false);
+    const isAuthenticated = useIsAuthenticated();
+    const {data: user} = useProfile(undefined, isAuthenticated);
+
+    const mutation = useMutation({
+        mutationFn: () => {
+            return deletePost(post.id.toString());
+        },
+        onSuccess: async () => {
+            refetch();
+        },
+    });
+
     return (
         <article
             className="bg-surface rounded-xl border border-primary/5 shadow-[0_4px_24px_rgba(18,5,28,0.3)] relative group transition-all duration-300">
@@ -46,9 +63,15 @@ export default function Post({post}: PostProps) {
                         </div>
                     </div>
                 </div>
-                <button className="text-on-surface-variant hover:text-primary-fixed transition-colors p-1">
-                    <span className="material-symbols-outlined" data-icon="more_vert">more_vert</span>
-                </button>
+                {
+                    isAuthenticated && post.user.id === user!.id && (
+                        <button
+                            onClick={() => confirm('Are you sure you want to delete this post?') && mutation.mutate()}
+                            className="text-on-surface-variant hover:text-secondary transition-colors p-1 cursor-pointer">
+                            <span className="material-symbols-outlined" data-icon="delete">delete</span>
+                        </button>
+                    )
+                }
             </div>
             <div className="px-md py-sm relative z-10">
                 <div className="font-body-md text-body-md text-on-surface/90 leading-relaxed mb-4">

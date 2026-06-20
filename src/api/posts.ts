@@ -27,6 +27,14 @@ export async function createComment(id: string, content: string) {
     return await apiFetch<Post>(`/posts/${id}/comments`, {method: 'POST', body: JSON.stringify({ content })})
 }
 
+export async function deletePost(postId: string) {
+    const response= await rawApiFetch(`/posts/${postId}`, {method: 'DELETE'})
+    if (!response.ok) {
+        throw new Error(`Request to delete post failed with status ${response.status}`)
+    }
+    return true;
+}
+
 export async function deleteComment(postId: string, commentId: string) {
     const response= await rawApiFetch(`/posts/${postId}/comments/${commentId}`, {method: 'DELETE'})
     if (!response.ok) {

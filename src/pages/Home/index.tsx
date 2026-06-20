@@ -24,6 +24,7 @@ export default function HomePage() {
                             <Post
                                 key={post.id}
                                 post={post}
+                                refetch={refetch}
                             />
                         ))
                     )}
