@@ -10,6 +10,7 @@ export default function Filter() {
     const [playerCount, setPlayerCount] = useState<string[]>([]);
     const [complexity, setComplexity] = useState<string[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
+    const [rating, setRating] = useState<string[]>([]);
     return (
         <aside className="w-full flex flex-col gap-sm px-sm mt-lg">
             <div className="flex items-center justify-between">
@@ -43,9 +44,17 @@ export default function Filter() {
             </FilterSection>
             <FilterSection title="Player count">
                 <FilterMultipleSelection
+                    maxSelection={1}
                     values={['1', '2', '3', '4', '5+']}
                     selections={playerCount}
                     onSelectionChange={setPlayerCount}/>
+            </FilterSection>
+            <FilterSection title="Rating">
+                <FilterMultipleSelection
+                    maxSelection={2}
+                    values={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}
+                    selections={rating}
+                    onSelectionChange={setRating}/>
             </FilterSection>
         </aside>
     );

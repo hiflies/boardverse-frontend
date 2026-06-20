@@ -1,14 +1,19 @@
 type FilterMultipleSelectionProps = {
+    maxSelection?: number;
     values: string[];
     selections: string[];
     onSelectionChange(selections: string[]): void;
 };
-export default function FilterMultipleSelection({values, selections, onSelectionChange}: FilterMultipleSelectionProps) {
+export default function FilterMultipleSelection({maxSelection, values, selections, onSelectionChange}: FilterMultipleSelectionProps) {
     const change = (value: string) => {
         if (selections.includes(value)) {
             onSelectionChange(selections.filter(v => v !== value));
         } else {
-            onSelectionChange([...selections, value]);
+            const result = [...selections, value];
+            if(maxSelection && result.length > maxSelection) {
+                result.shift();
+            }
+            onSelectionChange(result);
         }
     };
     return (
