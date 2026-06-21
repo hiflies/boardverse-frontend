@@ -1,30 +1,33 @@
 import ProfilePhoto from "../ProfilePhoto";
 import {Link} from "@tanstack/react-router";
 import ReactTimeAgo from "react-time-ago";
-import { profileRoute } from "../../router";
+import {profileRoute} from "../../router";
 import type {Post} from "../../types/Post.ts";
 import type {Comment} from "../../types/Comment.ts";
 import {useIsAuthenticated} from "../../store/auth.ts";
 import {useProfile} from "../../hooks/useProfile.ts";
-import { useMutation } from "@tanstack/react-query";
-import { deleteComment } from "../../api/posts.ts";
+import {useMutation} from "@tanstack/react-query";
+import {deleteComment} from "../../api/posts.ts";
+import useUpdateCommentCount from "../../hooks/useUpdateCommentCount.ts";
 
 type CommentProps = {
-    post : Post;
+    post: Post;
     comment: Comment;
     refetch: () => void;
 }
 
-export default function Comment({post, comment, refetch}:CommentProps) {
+export default function Comment({post, comment, refetch}: CommentProps) {
     const isAuthenticated = useIsAuthenticated();
     const {data: user} = useProfile(undefined, isAuthenticated);
+    const updateCommentCount = useUpdateCommentCount(post.id);
 
     const mutation = useMutation({
         mutationFn: () => {
             return deleteComment(post.id.toString(), comment.id.toString());
         },
-        onSuccess: async () => {
+        onSuccess: () => {
             refetch();
+            updateCommentCount(-1);
         },
     });
 

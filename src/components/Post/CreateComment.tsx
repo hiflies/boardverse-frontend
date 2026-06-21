@@ -5,6 +5,7 @@ import {useMutation} from "@tanstack/react-query";
 import type {Post} from "../../types/Post.ts";
 import {createComment} from "../../api/posts.ts";
 import clsx from "clsx";
+import useUpdateCommentCount from "../../hooks/useUpdateCommentCount.ts";
 
 type CreateCommentProps = {
     post: Post;
@@ -14,14 +15,16 @@ type CreateCommentProps = {
 export default function CreateComment({post, refetch}: CreateCommentProps) {
     const {data: user} = useProfile();
     const [content, setContent] = useState('');
+    const updateCommentCount = useUpdateCommentCount(post.id);
 
     const mutation = useMutation({
         mutationFn: () => {
             return createComment(post.id.toString(), content);
         },
-        onSuccess: async () => {
+        onSuccess: () => {
             refetch();
             setContent('');
+            updateCommentCount(1);
         },
     });
 

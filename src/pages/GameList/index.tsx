@@ -11,7 +11,7 @@ export default function GameList() {
     const search = useSearch({from: gameListRoute.id})
     const {data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage} = useGames(search)
     const {setSidebarSlot} = useUIStore();
-    const sentinelRef = useRef<HTMLDivElement>(null)
+    const sentinelRef = useRef<HTMLAnchorElement>(null)
 
     useEffect(() => {
         setSidebarSlot(<Filter/>);
@@ -59,11 +59,12 @@ export default function GameList() {
                     <p className="text-error font-body-md text-body-md">Failed to load games: {error.message}</p>
                 )}
                 {allItems.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-                        {allItems.map((game) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-gutter">
+                        {allItems.map((game, index) => (
                             <GameCard
                                 key={game.id}
                                 game={game}
+                                ref={index === allItems.length - 1 ? sentinelRef : undefined}
                             />
                         ))}
                     </div>
@@ -71,9 +72,9 @@ export default function GameList() {
                 {data && allItems.length === 0 && !isLoading && (
                     <p className="text-on-surface-variant font-body-md text-body-md">No games match your filters.</p>
                 )}
-                <div ref={sentinelRef}/>
                 {isFetchingNextPage && (
-                    <p className="text-on-surface-variant font-body-md text-body-md text-center py-lg">Loading more...</p>
+                    <p className="text-on-surface-variant font-body-md text-body-md text-center py-lg">Loading
+                        more...</p>
                 )}
             </div>
         </main>
