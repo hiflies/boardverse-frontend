@@ -1,14 +1,20 @@
 import {useGame} from "../../hooks/useGames.ts";
-import {gameDetailRoute} from "../../router.tsx";
+import {gameDetailRoute, loginRoute} from "../../router.tsx";
 import {useState} from "react";
 import clsx from "clsx";
 import FilteredPosts from "../../components/FilteredPosts";
 import Markdown from "../../components/Markdown";
+import Modal from "../../components/Modal";
+import CreateGameLog from "../../components/CreateGameLog";
+import {useIsAuthenticated} from "../../store/auth.ts";
 
 export default function GameDetail() {
     const gameId = gameDetailRoute.useParams({select: params => params.gameId});
+    const isAuthenticated = useIsAuthenticated();
     const {data: game, isLoading, isError, error} = useGame(gameId);
     const [isCommunityVisible, setIsCommunityVisible] = useState(false);
+    const [isLogModalOpen, setIsLogModalOpen] = useState(false);
+    const navigate = loginRoute.useNavigate();
 
     if (isLoading || isError || !game || error) {
         return (
@@ -80,12 +86,13 @@ export default function GameDetail() {
                     </div>
                     <div className="flex flex-wrap gap-4">
                         <button
-                            className="bg-primary-container text-on-primary-container hover:brightness-110 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 shadow-lg flex-1 min-w-[180px]">
+                            className="bg-primary-container text-on-primary-container hover:brightness-110 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 shadow-lg flex-1 min-w-[180px] cursor-pointer">
                             <span className="material-symbols-outlined">add</span>
                             Add to Collection
                         </button>
                         <button
-                            className="bg-surface-bright/50 backdrop-blur-sm text-on-surface hover:bg-surface-bright/70 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 border border-white/10 flex-1 min-w-[180px]">
+                            onClick={() => isAuthenticated ? setIsLogModalOpen(true) : navigate({})}
+                            className="bg-surface-bright/50 backdrop-blur-sm text-on-surface hover:bg-surface-bright/70 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 border border-white/10 flex-1 min-w-[180px] cursor-pointer">
                             <span className="material-symbols-outlined">edit_square</span>
                             Log a Play
                         </button>
@@ -165,6 +172,11 @@ export default function GameDetail() {
                     )}
                 </div>
             </div>
+            {isAuthenticated &&
+                <Modal isOpen={isLogModalOpen} onClose={() => setIsLogModalOpen(false)} title="Log a Play">
+                    <CreateGameLog gameId={game.id} onClose={() => setIsLogModalOpen(false)}/>
+                </Modal>
+            }
         </main>
     );
 }
