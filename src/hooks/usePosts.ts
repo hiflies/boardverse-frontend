@@ -1,10 +1,13 @@
-import {useQuery} from '@tanstack/react-query'
+import {useInfiniteQuery, useQuery} from '@tanstack/react-query'
 import {getComments, getPost, getPosts} from "../api/posts.ts";
 
 export function usePosts() {
-    return useQuery({
+    return useInfiniteQuery({
         queryKey: ['posts'],
-        queryFn: getPosts,
+        queryFn: ({pageParam}) => getPosts(pageParam),
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) =>
+            lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
     })
 }
 

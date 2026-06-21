@@ -1,9 +1,11 @@
 import {apiFetch, rawApiFetch} from '../lib/api'
 import type {Post} from "../types/Post.ts";
 import type {Comment} from "../types/Comment.ts";
+import type {PagedResult} from "../types/Game.ts";
 
-export function getPosts() {
-    return apiFetch<Post[]>('/posts')
+export function getPosts(page = 1) {
+    const qs = page > 1 ? `?page=${page}` : ''
+    return apiFetch<PagedResult<Post>>(`/posts${qs}`)
 }
 
 export function getPost(id: string) {

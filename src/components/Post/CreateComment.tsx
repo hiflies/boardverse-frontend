@@ -4,6 +4,7 @@ import {useState} from "react";
 import {useMutation} from "@tanstack/react-query";
 import type {Post} from "../../types/Post.ts";
 import {createComment} from "../../api/posts.ts";
+import clsx from "clsx";
 
 type CreateCommentProps = {
     post: Post;
@@ -41,7 +42,10 @@ export default function CreateComment({post, refetch}: CreateCommentProps) {
                     onClick={() => mutation.mutate()}
                     disabled={mutation.isPending || !content.trim()}
                     className="p-2 text-on-surface-variant hover:text-secondary transition-colors shrink-0">
-                    <span className="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+                    <span className={clsx(`material-symbols-outlined text-[20px]`, {
+                        'animate-spin': mutation.isPending,
+                    })}
+                          data-icon={mutation.isPending ? 'progress_activity' : 'send'}>{mutation.isPending ? 'progress_activity' : 'send'}</span>
                 </button>
             </div>
         </div>

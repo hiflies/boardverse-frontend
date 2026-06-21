@@ -2,7 +2,7 @@ import type {Post} from "../../types/Post.ts";
 import GameLog from "../GameLog";
 import Markdown from "react-markdown";
 import ReactTimeAgo from "react-time-ago";
-import {useState} from "react";
+import {forwardRef, type Ref, useState} from "react";
 import Comments from "./Comments.tsx";
 import ProfilePhoto from "../ProfilePhoto";
 import {Link} from "@tanstack/react-router";
@@ -18,7 +18,7 @@ type PostProps = {
     refetch: () => void;
 }
 
-export default function Post({post, refetch}: PostProps) {
+function Post({post, refetch}: PostProps, ref: Ref<HTMLDivElement>) {
     const [isCommentsVisible, setIsCommentsVisible] = useState(false);
     const isAuthenticated = useIsAuthenticated();
     const {data: user} = useProfile(undefined, isAuthenticated);
@@ -34,7 +34,8 @@ export default function Post({post, refetch}: PostProps) {
 
     return (
         <article
-            className="bg-surface rounded-xl border border-primary/5 shadow-[0_4px_24px_rgba(18,5,28,0.3)] relative group transition-all duration-300">
+            ref={ref}
+            className="bg-surface rounded-xl border border-primary/5 shadow-[0_4px_24px_rgba(18,5,28,0.3)] relative group transition-all duration-300 mb-lg">
             <div className="absolute inset-0 texture-overlay pointer-events-none rounded-xl"></div>
             {
                 Boolean(post.gameLog) &&
@@ -64,7 +65,7 @@ export default function Post({post, refetch}: PostProps) {
                     </div>
                 </div>
                 {
-                    isAuthenticated && post.user.id === user!.id && (
+                    isAuthenticated && post.user.id === user?.id && (
                         <button
                             onClick={() => confirm('Are you sure you want to delete this post?') && mutation.mutate()}
                             className="text-on-surface-variant hover:text-secondary transition-colors p-1 cursor-pointer">
@@ -125,3 +126,5 @@ export default function Post({post, refetch}: PostProps) {
         </article>
     )
 }
+
+export default forwardRef(Post);

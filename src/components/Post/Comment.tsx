@@ -57,7 +57,7 @@ export default function Comment({post, comment, refetch}:CommentProps) {
                 </div>
             </div>
             {
-                isAuthenticated && comment.user.id === user!.id && (
+                isAuthenticated && comment.user.id === user?.id && (
                     <button
                         onClick={() => confirm('Are you sure you want to delete this comment?') && mutation.mutate()}
                         className="text-on-surface-variant hover:text-secondary cursor-pointer transition-colors ">
