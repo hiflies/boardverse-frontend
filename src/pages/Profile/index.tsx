@@ -3,6 +3,7 @@ import {loginRoute, profileRoute} from "../../router.tsx";
 import {useIsAuthenticated} from "../../store/auth.ts";
 import {useEffect} from "react";
 import ProfilePhoto from "../../components/ProfilePhoto";
+import FilteredPosts from "../../components/FilteredPosts";
 
 export default function Profile() {
     const username = profileRoute.useParams({select: params => params.username});
@@ -184,6 +185,17 @@ export default function Profile() {
                                     </li>
                                 </ul>
                             </div>
+                        </section>
+                        <section>
+                            <h2 className="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-2">
+                                <span className="material-symbols-outlined text-primary">history</span>
+                                Posts
+                            </h2>
+                            {Boolean(user) && (
+                                <FilteredPosts filter={{userId: user!.id.toString()}}>
+                                    There is no post from this user.
+                                </FilteredPosts>
+                            )}
                         </section>
                     </div>
                     <div className="lg:col-span-4 space-y-xl">
