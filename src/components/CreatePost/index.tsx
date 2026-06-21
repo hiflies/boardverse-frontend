@@ -4,8 +4,11 @@ import {useProfile} from "../../hooks/useProfile.ts";
 import ProfilePhoto from "../ProfilePhoto";
 import clsx from "clsx";
 import {createPost} from "../../api/posts.ts";
+import FilteredGameLogs from "../FilteredGameLogs";
+import type {GameLog as GameLogType} from "../../types/GameLog.ts";
+import GameLog from "../GameLog";
 
-type CreatePostProps ={
+type CreatePostProps = {
     refetch: () => void;
 }
 
@@ -15,16 +18,20 @@ export default function CreatePost({refetch}: CreatePostProps) {
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [gameLog, setGameLog] = useState<GameLogType | null>(null);
+    const [showGameLogSelection, setShowGameLogSelection] = useState(false);
 
     const mutation = useMutation({
         mutationFn: () => {
-            return createPost(content, image);
+            return createPost(content, image, gameLog?.id.toString());
         },
         onSuccess: () => {
             refetch();
             setContent('');
             setImage(null);
             setPreviewUrl(null);
+            setShowGameLogSelection(false);
+            setGameLog(null);
             if (fileInputRef.current) fileInputRef.current.value = '';
         },
     });
@@ -79,6 +86,27 @@ export default function CreatePost({refetch}: CreatePostProps) {
                           rows={3}
                           value={content}
                           onChange={e => setContent(e.target.value)}></textarea>
+
+                        {Boolean(gameLog) && !showGameLogSelection && (
+                            <GameLog gameLog={gameLog!} buttonIcon="close" onButtonClick={() => setGameLog(null)}/>
+                        )}
+
+                        {showGameLogSelection && (
+                            <div className="max-h-100 overflow-y-auto">
+                                {Boolean(user) && (
+                                    <FilteredGameLogs
+                                        filter={{userId: user!.id.toString(), hasPosts: 'false'}}
+                                        buttonIcon="add"
+                                        onButtonClick={log => {
+                                            setGameLog(log);
+                                            setShowGameLogSelection(false);
+                                        }}>
+                                        There is no game log from this user.
+                                    </FilteredGameLogs>
+                                )}
+                            </div>
+                        )}
+
                         {previewUrl && (
                             <div className="relative mt-2 rounded-lg overflow-hidden border border-surface-variant">
                                 <img src={previewUrl} alt="Preview" className="w-full max-h-60 object-cover"/>
@@ -93,6 +121,7 @@ export default function CreatePost({refetch}: CreatePostProps) {
                         )}
                     </div>
                 </div>
+
                 <div className="flex justify-between items-center pl-14">
                     <div className="flex gap-2">
                         <input
@@ -112,6 +141,7 @@ export default function CreatePost({refetch}: CreatePostProps) {
                             <span className="material-symbols-outlined" data-icon="image">image</span>
                         </button>
                         <button
+                            onClick={() => setShowGameLogSelection(!showGameLogSelection)}
                             className="p-2 text-on-surface-variant hover:text-secondary rounded-full hover:bg-surface-variant transition-colors"
                             title="Tag Game">
                                             <span className="material-symbols-outlined"

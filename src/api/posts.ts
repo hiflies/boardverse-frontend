@@ -28,10 +28,11 @@ export function getComments(id: string) {
     return apiFetch<Comment[]>(`/posts/${id}/comments`)
 }
 
-export async function createPost(content: string, image: File | null) {
+export async function createPost(content: string, image: File | null, gameLogId?: string) {
     const form = new FormData()
     form.append('content', content)
     if (image) form.append('image', image)
+    if (gameLogId) form.append('gameLogId', gameLogId);
 
     return await apiFetch<Post>('/posts', {method: 'POST', body: form})
 }

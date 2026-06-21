@@ -1,19 +1,26 @@
-import type {GameLog} from "../../types/GameLog.ts";
+import type {GameLog as GameLogType, GameLog} from "../../types/GameLog.ts";
 import {Link} from "@tanstack/react-router";
 import {gameDetailRoute, profileRoute} from "../../router.tsx";
+import {forwardRef, type Ref} from "react";
+import clsx from "clsx";
 
 type GameLogProps = {
     gameLog: GameLog;
+
+    buttonIcon?: string;
+    onButtonClick?: (gameLog: GameLogType) => void;
 }
 
-export default function GameLog({gameLog}: GameLogProps) {
+function GameLog({gameLog, buttonIcon, onButtonClick}: GameLogProps, ref: Ref<HTMLDivElement>) {
     const startedAt = new Date(gameLog.startedAt);
     const finishedAt = new Date(gameLog.finishedAt);
-    const duration = Math.round((finishedAt.getTime() - startedAt.getTime())/60_000);
+    const duration = Math.round((finishedAt.getTime() - startedAt.getTime()) / 60_000);
+
     return (
         <div
+            ref={ref}
             className="bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-4 mb-4 grid grid-cols-2 gap-4">
-            <div className="col-span-2">
+            <div className={clsx({"col-span-2": !buttonIcon})}>
                 <Link
                     to={gameDetailRoute.fullPath}
                     params={{gameId: gameLog.game.id.toString()}}
@@ -21,6 +28,15 @@ export default function GameLog({gameLog}: GameLogProps) {
                     {gameLog.game.name}
                 </Link>
             </div>
+            {Boolean(buttonIcon) && (
+                <div className="flex justify-end gap-2 text-on-surface-variant text-right">
+                    <button
+                        onClick={() => onButtonClick?.(gameLog)}
+                        className="cursor-pointer bg-primary-container text-on-primary-container font-label-md text-label-md px-2 py-2 rounded-DEFAULT hover:bg-on-primary-fixed hover:text-primary-fixed transition-all border border-transparent hover:border-primary-fixed/20 shadow-sm active:scale-95 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span className="material-symbols-outlined text-[16px]" data-icon={buttonIcon}>{buttonIcon}</span>
+                    </button>
+                </div>
+            )}
             <div className="flex items-center gap-2 text-on-surface-variant">
                 <div
                     className="w-8 h-8 rounded bg-surface-variant flex items-center justify-center shrink-0">
@@ -72,3 +88,5 @@ export default function GameLog({gameLog}: GameLogProps) {
         </div>
     );
 }
+
+export default forwardRef(GameLog);

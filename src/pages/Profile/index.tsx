@@ -4,6 +4,7 @@ import {useIsAuthenticated} from "../../store/auth.ts";
 import {useEffect} from "react";
 import ProfilePhoto from "../../components/ProfilePhoto";
 import FilteredPosts from "../../components/FilteredPosts";
+import FilteredGameLogs from "../../components/FilteredGameLogs";
 
 export default function Profile() {
     const username = profileRoute.useParams({select: params => params.username});
@@ -126,64 +127,14 @@ export default function Profile() {
                         <section>
                             <h2 className="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-2">
                                 <span className="material-symbols-outlined text-primary">history</span>
-                                Recent Activity
+                                Recent Plays
                             </h2>
-                            <div className="glass-card texture-overlay rounded-xl p-md md:p-lg relative">
-                                <div
-                                    className="absolute left-8 md:left-10 top-lg bottom-lg w-px bg-outline-variant/30"></div>
-                                <ul className="space-y-6 relative z-10">
-                                    <li className="flex gap-md group">
-                                        <div
-                                            className="w-10 h-10 rounded-full bg-surface-container border border-primary/30 flex items-center justify-center flex-shrink-0 mt-1 relative z-10 group-hover:border-primary transition-colors">
-                                            <span
-                                                className="material-symbols-outlined text-primary text-xl">play_circle</span>
-                                        </div>
-                                        <div
-                                            className="flex-1 bg-surface-container-low/50 p-4 rounded-lg border border-outline-variant/10 hover:border-outline-variant/30 transition-colors">
-                                            <p className="font-body-md text-body-md text-on-surface">
-                                                Logged a play of <span
-                                                className="font-title-lg text-title-lg text-primary">Everdell</span>
-                                            </p>
-                                            <div className="flex items-center gap-4 mt-2">
-                                                <span className="font-label-sm text-label-sm text-on-surface-variant">2h ago</span>
-                                                <span
-                                                    className="font-label-sm text-label-sm text-secondary bg-secondary/10 px-2 py-0.5 rounded">Score: 78 (Win)</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li className="flex gap-md group">
-                                        <div
-                                            className="w-10 h-10 rounded-full bg-surface-container border border-secondary/30 flex items-center justify-center flex-shrink-0 mt-1 relative z-10 group-hover:border-secondary transition-colors">
-                                            <span
-                                                className="material-symbols-outlined text-secondary text-xl">emoji_events</span>
-                                        </div>
-                                        <div
-                                            className="flex-1 bg-surface-container-low/50 p-4 rounded-lg border border-outline-variant/10 hover:border-outline-variant/30 transition-colors">
-                                            <p className="font-body-md text-body-md text-on-surface">
-                                                Earned achievement: <span
-                                                className="font-title-lg text-title-lg text-secondary">Industrialist</span>
-                                            </p>
-                                            <p className="font-label-sm text-label-sm text-on-surface-variant mt-2">1d
-                                                ago</p>
-                                        </div>
-                                    </li>
-                                    <li className="flex gap-md group">
-                                        <div
-                                            className="w-10 h-10 rounded-full bg-surface-container border border-outline/30 flex items-center justify-center flex-shrink-0 mt-1 relative z-10 group-hover:border-outline transition-colors">
-                                            <span
-                                                className="material-symbols-outlined text-outline text-xl">favorite</span>
-                                        </div>
-                                        <div
-                                            className="flex-1 bg-surface-container-low/50 p-4 rounded-lg border border-outline-variant/10 hover:border-outline-variant/30 transition-colors">
-                                            <p className="font-body-md text-body-md text-on-surface">
-                                                Added <span className="font-title-lg text-title-lg text-on-surface">Spirit Island</span> to
-                                                wishlist
-                                            </p>
-                                            <p className="font-label-sm text-label-sm text-on-surface-variant mt-2">2d
-                                                ago</p>
-                                        </div>
-                                    </li>
-                                </ul>
+                            <div className="glass-card texture-overlay rounded-xl p-md md:p-lg relative max-h-150 overflow-y-auto">
+                                {Boolean(user) && (
+                                    <FilteredGameLogs filter={{userId: user!.id.toString()}}>
+                                        There is no game log from this user.
+                                    </FilteredGameLogs>
+                                )}
                             </div>
                         </section>
                         <section>
