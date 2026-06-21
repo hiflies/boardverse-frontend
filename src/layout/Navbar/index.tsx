@@ -16,7 +16,7 @@ export default function Navbar() {
     const [nameInput, setNameInput] = useState(location.search.name ?? undefined)
 
     useDebounce(() => {
-        if ((!nameInput && !location.pathname.includes('/games')) || nameInput === undefined) {
+        if ((!nameInput && (!location.pathname.includes('/games') || location.pathname.includes('/games/'))) || nameInput === undefined) {
             return;
         }
 

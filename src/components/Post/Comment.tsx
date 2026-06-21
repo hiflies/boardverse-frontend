@@ -9,6 +9,7 @@ import {useProfile} from "../../hooks/useProfile.ts";
 import {useMutation} from "@tanstack/react-query";
 import {deleteComment} from "../../api/posts.ts";
 import useUpdateCommentCount from "../../hooks/useUpdateCommentCount.ts";
+import Markdown from "../Markdown";
 
 type CommentProps = {
     post: Post;
@@ -56,7 +57,7 @@ export default function Comment({post, comment, refetch}: CommentProps) {
                                     </span>
                 </div>
                 <div className="font-body-md text-[14px] text-on-surface/80 leading-snug">
-                    {comment.content}
+                    <Markdown>{comment.content}</Markdown>
                 </div>
             </div>
             {

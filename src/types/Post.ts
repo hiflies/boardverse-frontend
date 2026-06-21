@@ -6,7 +6,6 @@ export type Post = {
     user: User
     content: string
     gameLog?: GameLog
-    hashtags: string[]
     imageUrl?: string
     likeCount: number
     commentCount: number

@@ -1,10 +1,14 @@
 import {useGame} from "../../hooks/useGames.ts";
-import Markdown from "react-markdown";
 import {gameDetailRoute} from "../../router.tsx";
+import {useState} from "react";
+import clsx from "clsx";
+import FilteredPosts from "../../components/FilteredPosts";
+import Markdown from "../../components/Markdown";
 
 export default function GameDetail() {
     const gameId = gameDetailRoute.useParams({select: params => params.gameId});
     const {data: game, isLoading, isError, error} = useGame(gameId);
+    const [isCommunityVisible, setIsCommunityVisible] = useState(false);
 
     if (isLoading || isError || !game || error) {
         return (
@@ -99,40 +103,66 @@ export default function GameDetail() {
             <div className="max-w-[1280px] mx-auto px-margin-mobile md:px-gutter lg:px-margin-desktop py-lg">
                 <div className="border-b border-outline-variant/20 mb-lg">
                     <nav className="-mb-px flex gap-8 overflow-x-auto">
-                        <a className="border-b-2 border-primary text-primary whitespace-nowrap py-4 px-1 text-label-md font-label-md font-medium"
-                           href="#">Overview</a>
-                        <a className="border-b-2 border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline-variant whitespace-nowrap py-4 px-1 text-label-md font-label-md font-medium transition-colors"
-                           href="#">Community</a>
+                        <button onClick={() => setIsCommunityVisible(false)}
+                                className={clsx("cursor-pointer border-b-2 whitespace-nowrap py-4 px-1 text-label-md font-label-md font-medium", {
+                                    "border-primary text-primary": !isCommunityVisible,
+                                    "border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline-variant transition-colors": isCommunityVisible
+                                })}>Overview
+                        </button>
+                        <button onClick={() => setIsCommunityVisible(true)}
+                                className={clsx("cursor-pointer border-b-2 whitespace-nowrap py-4 px-1 text-label-md font-label-md font-medium", {
+                                    "border-primary text-primary": isCommunityVisible,
+                                    "border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline-variant transition-colors": !isCommunityVisible
+                                })}>Community
+                        </button>
                     </nav>
                 </div>
                 <div className="flex flex-col gap-xl max-w-4xl">
-                    <section>
-                        <h2 className="text-headline-md font-headline-md text-primary mb-md flex items-center gap-2">
-                            <span className="material-symbols-outlined text-secondary">menu_book</span>
-                            Overview
-                        </h2>
-                        <div
-                            className="prose prose-invert prose-p:text-body-lg prose-p:font-body-lg prose-p:text-on-surface-variant prose-p:leading-relaxed max-w-none">
-                            <Markdown>
-                                {game.description}
-                            </Markdown>
-                        </div>
-                    </section>
-                    <section>
-                        <h2 className="text-headline-sm font-headline-sm text-primary mb-md">Mechanics &amp; Theme</h2>
-                        <div className="flex flex-wrap gap-3">
-                            {
-                                game.categories.map(category => (
-                                    <span
-                                        key={category.id}
-                                        className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">
+                    {!isCommunityVisible && (
+                        <>
+                            <section>
+                                <h2 className="text-headline-md font-headline-md text-primary mb-md flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-secondary">menu_book</span>
+                                    Overview
+                                </h2>
+                                <div
+                                    className="prose prose-invert prose-p:text-body-lg prose-p:font-body-lg prose-p:text-on-surface-variant prose-p:leading-relaxed max-w-none">
+                                    <Markdown>
+                                        {game.description}
+                                    </Markdown>
+                                </div>
+                            </section>
+                            <section>
+                                <h2 className="text-headline-sm font-headline-sm text-primary mb-md">Mechanics &amp; Theme</h2>
+                                <div className="flex flex-wrap gap-3">
+                                    {
+                                        game.categories.map(category => (
+                                            <span
+                                                key={category.id}
+                                                className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">
                                         {category.name}
                                     </span>
 
-                                ))
-                            }
-                        </div>
-                    </section>
+                                        ))
+                                    }
+                                </div>
+                            </section>
+                        </>
+                    )}
+                    {isCommunityVisible && (
+                        <section>
+                            <h2 className="text-headline-md font-headline-md text-primary mb-md flex items-center gap-2">
+                                <span className="material-symbols-outlined text-secondary">group</span>
+                                Community
+                            </h2>
+                            <div
+                                className="prose prose-invert prose-p:text-body-lg prose-p:font-body-lg prose-p:text-on-surface-variant prose-p:leading-relaxed max-w-none">
+                                <FilteredPosts filter={{gameId: game.id.toString()}}>
+                                    There is no community post for this game.
+                                </FilteredPosts>
+                            </div>
+                        </section>
+                    )}
                 </div>
             </div>
         </main>

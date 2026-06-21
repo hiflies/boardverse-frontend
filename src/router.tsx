@@ -8,6 +8,7 @@ import GameList from "./pages/GameList";
 import RegisterPage from "./pages/RegisterPage";
 import AuthLayout from "./layout/AuthLayout";
 import type { GameListSearchParams } from "./types/GameListSearchParams";
+import Hashtag from "./pages/Hashtag";
 
 const rootRoute = createRootRoute()
 
@@ -50,6 +51,12 @@ export const gameDetailRoute = createRoute({
     component: GameDetail,
 })
 
+export const hashtagRoute = createRoute({
+    getParentRoute: () => mainLayoutRoute,
+    path: '/hashtags/$hashtag',
+    component: Hashtag,
+})
+
 export const profileRoute = createRoute({
     getParentRoute: () => mainLayoutRoute,
     path: `/profile/{-$username}`,
@@ -73,6 +80,7 @@ const routeTree = rootRoute.addChildren([
         indexRoute,
         gameListRoute,
         gameDetailRoute,
+        hashtagRoute,
         profileRoute,
     ]),
     authLayoutRoute.addChildren([

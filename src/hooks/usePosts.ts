@@ -1,10 +1,11 @@
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query'
 import {getComments, getPost, getPosts} from "../api/posts.ts";
+import type {PostFilter} from "../types/PostFilter.ts";
 
-export function usePosts() {
+export function usePosts(postFilter: PostFilter = {}) {
     return useInfiniteQuery({
-        queryKey: ['posts'],
-        queryFn: ({pageParam}) => getPosts(pageParam),
+        queryKey: ['posts', postFilter],
+        queryFn: ({pageParam}) => getPosts(pageParam, postFilter),
         initialPageParam: 1,
         getNextPageParam: (lastPage) =>
             lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,

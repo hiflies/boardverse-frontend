@@ -18,8 +18,7 @@ export default function CreatePost({refetch}: CreatePostProps) {
 
     const mutation = useMutation({
         mutationFn: () => {
-            const hashtags = [...content.matchAll(/#(\w+)/g)].map(m => m[1]);
-            return createPost(content, hashtags, image);
+            return createPost(content, image);
         },
         onSuccess: () => {
             refetch();

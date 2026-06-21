@@ -1,6 +1,5 @@
 import type {Post} from "../../types/Post.ts";
 import GameLog from "../GameLog";
-import Markdown from "react-markdown";
 import ReactTimeAgo from "react-time-ago";
 import {forwardRef, type Ref, useState} from "react";
 import Comments from "./Comments.tsx";
@@ -12,6 +11,7 @@ import {useMutation} from "@tanstack/react-query";
 import {deletePost} from "../../api/posts.ts";
 import {useIsAuthenticated} from "../../store/auth.ts";
 import {useProfile} from "../../hooks/useProfile.ts";
+import Markdown from "../Markdown";
 
 type PostProps = {
     post: Post
@@ -88,14 +88,6 @@ function Post({post, refetch}: PostProps, ref: Ref<HTMLDivElement>) {
                         />
                     </div>
                 }
-                <div className="flex flex-wrap gap-2 mb-2 uppercase">
-                    {post.hashtags.map((tag) => (
-                        <span key={tag}
-                              className="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-2.5 py-1 rounded-DEFAULT border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-pointer">
-                            #{tag}
-                        </span>
-                    ))}
-                </div>
             </div>
             <div
                 className="px-md py-3 border-t border-surface-variant flex items-center gap-6 relative z-10 bg-surface-container-lowest/50 rounded-b-xl">
