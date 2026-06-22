@@ -1,7 +1,7 @@
 import {useProfile} from "../../hooks/useProfile.ts";
 import {gameDetailRoute, gameListRoute, loginRoute, profileRoute} from "../../router.tsx";
 import {useAuthStore, useIsAuthenticated} from "../../store/auth.ts";
-import {useEffect} from "react";
+import {type ChangeEvent, useEffect, useRef, useState} from "react";
 import ProfilePhoto from "../../components/ProfilePhoto";
 import FilteredPosts from "../../components/FilteredPosts";
 import FilteredGameLogs from "../../components/FilteredGameLogs";
@@ -10,25 +10,50 @@ import {Link} from "@tanstack/react-router";
 import type {GameLog} from "../../types/GameLog.ts";
 import {deleteGameLog} from "../../api/gamelogs.ts";
 import {useGames} from "../../hooks/useGames.ts";
+import {useMutation} from "@tanstack/react-query";
+import {updateProfile} from "../../api/profile.ts";
 
 export default function Profile() {
     const username = profileRoute.useParams({select: params => params.username});
     const isAuthenticated = useIsAuthenticated();
     const authenticatedUsername = useAuthStore(a => a.username);
     const isEnabled = Boolean(username) || isAuthenticated;
-    const {data: user, isLoading, isError} = useProfile(username, isEnabled, true);
+    const {data: user, isLoading, isError, refetch} = useProfile(username, isEnabled, true);
     const {data: games, isLoading: isGamesLoading, isError: isGamesError} = useGames({
         username: user?.username,
         pageSize: 3,
         sortBy: 'rating',
     }, Boolean(user));
+    const [textInput, setTextInput] = useState(user?.profileText ?? '');
+    const [editTextVisible, setEditTextVisible] = useState(false);
     const navigate = loginRoute.useNavigate();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const updateProfileTextMutation = useMutation({
+        mutationFn: () => updateProfile({text: textInput}),
+        onSuccess: () => {
+            setEditTextVisible(false);
+            refetch();
+        }
+    });
+
+    const updateProfileImageMutation = useMutation({
+        mutationFn: () => updateProfile({image: fileInputRef.current!.files![0] ?? undefined}),
+        onSuccess: () => {
+            refetch();
+        }
+    });
 
     useEffect(() => {
         if (!isEnabled) {
             navigate({});
         }
     }, [isEnabled, navigate]);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setTextInput(user?.profileText ?? '');
+    }, [user]);
 
     function handleDelete(refetch: () => void, gameLog: GameLog) {
         if (!confirm("Related comments and posts will be deleted. Are you sure you want to delete this game log?")) {
@@ -38,25 +63,77 @@ export default function Profile() {
             .then(() => refetch());
     }
 
+    function handleImageSelect(e: ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0] ?? null;
+        if (file) {
+            updateProfileImageMutation.mutate();
+        }
+    }
+
     if (isLoading || isError || !user || isGamesLoading || isGamesError || !games) {
         return null;
     }
 
     const allGames = games?.pages.flatMap(p => p.items) ?? []
+    const isMyProfile = !username || username === authenticatedUsername;
 
     return (
         <main
             className="flex-1 w-full px-margin-mobile md:px-margin-desktop py-md md:py-lg flex justify-center">
             <div className="p-margin-mobile md:p-margin-desktop space-y-xl max-w-6xl mx-auto pb-32 md:pb-xl pt-lg">
                 <section className="flex items-center gap-md">
-                    <ProfilePhoto
-                        src={user.avatarUrl}
-                        alt={user.username}
-                        className="w-16 h-16 rounded-full border-2 border-primary/30 object-cover"
-                    />
+                    <div className="relative">
+                        <ProfilePhoto
+                            src={user.avatarUrl}
+                            alt={user.username}
+                            className="w-16 h-16 rounded-full border-2 border-primary/30 object-cover"
+                        />
+                        {isMyProfile && (
+                            <>
+                                <button
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="absolute left-0 top-0 w-full h-full flex justify-center items-center cursor-pointer hover:bg-black/50 rounded-full group">
+                                <span
+                                    className="material-symbols-outlined text-secondary invisible group-hover:visible">
+                                    upload
+                                </span>
+                                </button>
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleImageSelect}
+                                />
+                            </>
+                        )}
+                    </div>
                     <div>
                         <p className="font-headline-md text-headline-md text-on-surface">{user.username}</p>
-                        <p className="font-label-md text-label-md text-on-surface-variant">{user.profileText}</p>
+                        {!editTextVisible && (
+                            <p className="font-label-md text-label-md text-on-surface-variant">
+                                {user.profileText}
+                                {isMyProfile && (
+                                    <button
+                                        onClick={() => setEditTextVisible(true)}
+                                        className="material-symbols-outlined text-primary hover:text-secondary cursor-pointer ml-1 text-label-md!">edit
+                                    </button>
+                                )}
+                            </p>
+                        )}
+                        {editTextVisible && (
+                            <p className="font-label-md text-label-md text-on-surface-variant">
+                                <input
+                                    type="text"
+                                    className="bg-surface-container-lowest border-0 border-b border-outline-variant/50 text-on-background placeholder:text-outline/50 focus:ring-0 focus:border-secondary-container transition-colors input-well"
+                                    onChange={(e) => setTextInput(e.target.value)}
+                                    value={textInput}/>
+                                <button onClick={() => updateProfileTextMutation.mutate()}
+                                        className="material-symbols-outlined text-primary hover:text-secondary cursor-pointer ml-1 text-label-md!">
+                                    check
+                                </button>
+                            </p>
+                        )}
                     </div>
                 </section>
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
@@ -112,7 +189,7 @@ export default function Profile() {
                             <div
                                 className="glass-card texture-overlay rounded-xl p-md md:p-lg relative max-h-150 overflow-y-auto">
                                 <FilteredGameLogs filter={{userId: user.id.toString()}}
-                                                  buttonIcon={!username || username === authenticatedUsername ? 'delete' : undefined}
+                                                  buttonIcon={isMyProfile ? 'delete' : undefined}
                                                   onButtonClick={handleDelete}
                                 >
                                     No game logged
