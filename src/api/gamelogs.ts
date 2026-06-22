@@ -1,4 +1,4 @@
-import {apiFetch} from '../lib/api'
+import {apiFetch, rawApiFetch} from '../lib/api'
 import type {GameLog} from '../types/GameLog'
 import type {PagedResult} from "../types/Game.ts";
 import type {GameLogFilter} from "../types/GameLogFilter.ts";
@@ -14,6 +14,12 @@ export function createGameLog(payload: CreateGameLogPayload) {
     return apiFetch<GameLog>('/gamelogs', {
         method: 'POST',
         body: JSON.stringify(payload),
+    })
+}
+
+export function deleteGameLog(id: string ) {
+    return rawApiFetch(`/gamelogs/${id}`, {
+        method: 'DELETE',
     })
 }
 

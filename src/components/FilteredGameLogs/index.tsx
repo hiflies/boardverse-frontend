@@ -7,12 +7,21 @@ import GameLog from "../GameLog";
 type FilteredGameLogsProps = {
     filter: GameLogFilter;
     buttonIcon?: string;
-    onButtonClick?: (gameLog: GameLogType) => void;
+    onButtonClick?: (refetch: () => void, gameLog: GameLogType) => void;
 };
 
 export default function FilteredGameLogs(props: PropsWithChildren<FilteredGameLogsProps>) {
     const {filter, buttonIcon, onButtonClick, children} = props;
-    const {data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage} = useGameLogs(filter);
+    const {
+        data,
+        isLoading,
+        isError,
+        error,
+        refetch,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage
+    } = useGameLogs(filter);
     const sentinelRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -50,7 +59,7 @@ export default function FilteredGameLogs(props: PropsWithChildren<FilteredGameLo
                     key={log.id}
                     gameLog={log}
                     buttonIcon={buttonIcon}
-                    onButtonClick={onButtonClick}
+                    onButtonClick={onButtonClick?.bind(null, refetch)}
                 />
             ))}
 

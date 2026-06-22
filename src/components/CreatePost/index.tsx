@@ -89,7 +89,7 @@ export default function CreatePost({refetch}: CreatePostProps) {
                                     <FilteredGameLogs
                                         filter={{userId: user!.id.toString(), hasPosts: 'false'}}
                                         buttonIcon="add"
-                                        onButtonClick={log => {
+                                        onButtonClick={(_, log) => {
                                             setGameLog(log);
                                             setShowGameLogSelection(false);
                                         }}>
