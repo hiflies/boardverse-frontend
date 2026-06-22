@@ -8,7 +8,6 @@ import {useIsAuthenticated} from "../../store/auth.ts";
 import {useProfile} from "../../hooks/useProfile.ts";
 import {useMutation} from "@tanstack/react-query";
 import {deleteComment} from "../../api/posts.ts";
-import useUpdateCommentCount from "../../hooks/useUpdateCommentCount.ts";
 import Markdown from "../Markdown";
 
 type CommentProps = {
@@ -20,7 +19,6 @@ type CommentProps = {
 export default function Comment({post, comment, refetch}: CommentProps) {
     const isAuthenticated = useIsAuthenticated();
     const {data: user} = useProfile(undefined, isAuthenticated);
-    const updateCommentCount = useUpdateCommentCount(post.id);
 
     const mutation = useMutation({
         mutationFn: () => {
@@ -28,7 +26,6 @@ export default function Comment({post, comment, refetch}: CommentProps) {
         },
         onSuccess: () => {
             refetch();
-            updateCommentCount(-1);
         },
     });
 

@@ -8,9 +8,10 @@ import Comment from "./Comment.tsx";
 
 type CommentsProps = {
     post: Post;
+    refetch: () => void;
 }
 
-export default function Comments({post}: CommentsProps) {
+export default function Comments({post, refetch: refetchPosts}: CommentsProps) {
     const isAuthenticated = useIsAuthenticated();
     const {data: comments, isLoading, isError, error, refetch} = useComments(post.id.toString());
     const navigate = loginRoute.useNavigate();
@@ -21,10 +22,15 @@ export default function Comments({post}: CommentsProps) {
         }
     }, [comments, isAuthenticated, isLoading, navigate]);
 
+    const refetchAll = () => {
+        refetchPosts();
+        refetch();
+    };
+
     return (
         <div className="relative z-10 border-t border-surface-variant">
             {isAuthenticated && (
-                <CreateComment post={post} refetch={refetch}/>
+                <CreateComment post={post} refetch={refetchAll}/>
             )}
             <div className="divide-y divide-surface-variant/40">
                 {isLoading && (
@@ -38,7 +44,7 @@ export default function Comments({post}: CommentsProps) {
                         <Comment key={comment.id}
                                  post={post}
                                  comment={comment}
-                                 refetch={refetch}
+                                 refetch={refetchAll}
                         />
                     ))
                 )}

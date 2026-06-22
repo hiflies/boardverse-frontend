@@ -5,10 +5,10 @@ import {forwardRef, type Ref, useState} from "react";
 import Comments from "./Comments.tsx";
 import ProfilePhoto from "../ProfilePhoto";
 import {Link} from "@tanstack/react-router";
-import {profileRoute} from "../../router.tsx";
+import {loginRoute, profileRoute} from "../../router.tsx";
 import clsx from "clsx";
 import {useMutation} from "@tanstack/react-query";
-import {deletePost} from "../../api/posts.ts";
+import {deletePost, likePost} from "../../api/posts.ts";
 import {useIsAuthenticated} from "../../store/auth.ts";
 import {useProfile} from "../../hooks/useProfile.ts";
 import Markdown from "../Markdown";
@@ -22,10 +22,20 @@ function Post({post, refetch}: PostProps, ref: Ref<HTMLDivElement>) {
     const [isCommentsVisible, setIsCommentsVisible] = useState(false);
     const isAuthenticated = useIsAuthenticated();
     const {data: user} = useProfile(undefined, isAuthenticated);
+    const navigate = loginRoute.useNavigate();
 
     const mutation = useMutation({
         mutationFn: () => {
             return deletePost(post.id.toString());
+        },
+        onSuccess: async () => {
+            refetch();
+        },
+    });
+
+    const likeMutation = useMutation({
+        mutationFn: () => {
+            return likePost(post.id.toString());
         },
         onSuccess: async () => {
             refetch();
@@ -92,9 +102,14 @@ function Post({post, refetch}: PostProps, ref: Ref<HTMLDivElement>) {
             <div
                 className="px-md py-3 border-t border-surface-variant flex items-center gap-6 relative z-10 bg-surface-container-lowest/50 rounded-b-xl">
                 <button
-                    className="flex items-center gap-2 text-on-surface-variant hover:text-secondary transition-colors group cursor-pointer">
-                      <span className="material-symbols-outlined group-hover:scale-110 transition-transform"
-                            data-icon="favorite">favorite</span>
+                    onClick={() => isAuthenticated ? likeMutation.mutate() : navigate({})}
+                    className={clsx("flex items-center gap-2 group transition-colors cursor-pointer", {
+                        "text-on-surface-variant hover:text-secondary": !post.isLikedByCurrentUser,
+                        "text-secondary hover:text-secondary-container": post.isLikedByCurrentUser,
+                    })}>
+                      <span className="material-symbols-outlined group-hover:scale-110 transition-transform">
+                          {post.isLikedByCurrentUser ? 'heart_smile' : 'favorite'}
+                      </span>
                     <span className="font-label-md text-label-md">{post.likeCount}</span>
                 </button>
                 <button
@@ -112,7 +127,7 @@ function Post({post, refetch}: PostProps, ref: Ref<HTMLDivElement>) {
             </div>
             {
                 isCommentsVisible && (
-                    <Comments post={post}/>
+                    <Comments post={post} refetch={refetch}/>
                 )
             }
         </article>

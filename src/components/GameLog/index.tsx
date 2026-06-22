@@ -32,7 +32,7 @@ function GameLog({gameLog, buttonIcon, onButtonClick}: GameLogProps, ref: Ref<HT
                 <div className="flex justify-end gap-2 text-on-surface-variant text-right">
                     <button
                         onClick={() => onButtonClick?.(gameLog)}
-                        className="cursor-pointer bg-primary-container text-on-primary-container font-label-md text-label-md px-2 py-2 rounded-DEFAULT hover:bg-on-primary-fixed hover:text-primary-fixed transition-all border border-transparent hover:border-primary-fixed/20 shadow-sm active:scale-95 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        className="text-on-surface-variant hover:text-secondary transition-colors p-1 cursor-pointer">
                         <span className="material-symbols-outlined text-[16px]" data-icon={buttonIcon}>{buttonIcon}</span>
                     </button>
                 </div>

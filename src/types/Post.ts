@@ -8,6 +8,7 @@ export type Post = {
     gameLog?: GameLog
     imageUrl?: string
     likeCount: number
+    isLikedByCurrentUser: boolean
     commentCount: number
     createdAt: string
 }

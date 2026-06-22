@@ -31,11 +31,7 @@ export default function Navbar() {
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setNameInput(location.search.name ?? '');
-
-        console.log('change', location.search.name);
     }, [location.search.name]);
-
-    console.log('name', location.search.name);
 
     return (
         <header
