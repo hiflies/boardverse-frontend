@@ -26,4 +26,5 @@ export type GameDetails = Game & {
     releaseYear: number
     minAge: number
     description: string
+    isOwnedByCurrentUser: boolean
 };

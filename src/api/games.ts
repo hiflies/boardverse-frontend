@@ -1,4 +1,4 @@
-import {apiFetch} from '../lib/api'
+import {apiFetch, rawApiFetch} from '../lib/api'
 import type {Game, GameDetails, PagedResult} from "../types/Game.ts";
 
 export type GamesFilter = {
@@ -28,4 +28,12 @@ export function getGames(filter: GamesFilter = {}) {
 
 export function getGame(id: string) {
     return apiFetch<GameDetails>(`/games/${id}`)
+}
+
+export async function collectGame(gameId: string) {
+    const response = await rawApiFetch(`/games/${gameId}/collect`, {method: 'POST'})
+    if (!response.ok) {
+        throw new Error(`Request to collect game failed with status ${response.status}`)
+    }
+    return true;
 }

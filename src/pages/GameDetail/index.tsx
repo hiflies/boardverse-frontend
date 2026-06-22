@@ -8,20 +8,35 @@ import Modal from "../../components/Modal";
 import CreateGameLog from "../../components/CreateGameLog";
 import {useIsAuthenticated} from "../../store/auth.ts";
 import {Link} from "@tanstack/react-router";
+import {useMutation} from "@tanstack/react-query";
+import { collectGame } from "../../api/games.ts";
 
 export default function GameDetail() {
     const gameId = gameDetailRoute.useParams({select: params => params.gameId});
     const isAuthenticated = useIsAuthenticated();
-    const {data: game, isLoading, isError, error} = useGame(gameId);
+    const {data: game, isLoading, isError, error, refetch} = useGame(gameId);
     const [isCommunityVisible, setIsCommunityVisible] = useState(false);
     const [isLogModalOpen, setIsLogModalOpen] = useState(false);
     const navigate = loginRoute.useNavigate();
+
+    const addCollectionMutation = useMutation({
+        mutationFn: () => {
+            return collectGame(game!.id.toString());
+        },
+        onSuccess: async () => {
+            refetch();
+        },
+    });
 
     if (isLoading || isError || !game || error) {
         return (
             <div>Loading...</div>
         );
     }
+
+    let topCategories = [...game.categories];
+    topCategories.sort((a, b) => a.name.length - b.name.length);
+    topCategories = topCategories.slice(0,2);
 
     return (
         <main className="flex-1 overflow-y-auto">
@@ -42,7 +57,7 @@ export default function GameDetail() {
                                 <span className="material-symbols-outlined text-[14px]">star</span>
                                 {game.averageRating}
                             </span>
-                            {game.categories.map((category) => (
+                            {topCategories.map((category) => (
                                 <span key={category.id}
                                       className="text-label-md font-label-md text-on-surface-variant tracking-widest uppercase">
                                         {category.name}
@@ -85,22 +100,25 @@ export default function GameDetail() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-wrap gap-4">
+                    <div className="grid grid-cols-2 gap-4 min-w-115">
                         <button
-                            className="bg-primary-container text-on-primary-container hover:brightness-110 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 shadow-lg flex-1 min-w-[180px] cursor-pointer">
-                            <span className="material-symbols-outlined">add</span>
-                            Add to Collection
+                            onClick={() => isAuthenticated ? addCollectionMutation.mutate() : navigate({})}
+                            className="bg-primary-container text-on-primary-container hover:brightness-110 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 shadow-lg min-w-[180px] cursor-pointer">
+                            <span className="material-symbols-outlined">
+                                {game.isOwnedByCurrentUser ? 'bookmark_added' : 'bookmark_add'}
+                            </span>
+                            {game.isOwnedByCurrentUser ? 'Remove' : 'Add to Collection'}
                         </button>
                         <button
                             onClick={() => isAuthenticated ? setIsLogModalOpen(true) : navigate({})}
-                            className="bg-surface-bright/50 backdrop-blur-sm text-on-surface hover:bg-surface-bright/70 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 border border-white/10 flex-1 min-w-[180px] cursor-pointer">
+                            className="bg-surface-bright/50 backdrop-blur-sm text-on-surface hover:bg-surface-bright/70 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 border border-white/10 min-w-[180px] cursor-pointer">
                             <span className="material-symbols-outlined">edit_square</span>
                             Log a Play
                         </button>
                         {Boolean(game.gameRulesUrl) &&
                             <a
                                 href={game.gameRulesUrl} download={true}
-                                className="bg-surface-bright/50 backdrop-blur-sm text-on-surface hover:bg-surface-bright/70 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 border border-white/10 flex-1 min-w-[180px]">
+                                className="col-span-2 bg-surface-bright/50 backdrop-blur-sm text-on-surface hover:bg-surface-bright/70 transition-all duration-200 px-8 py-3 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 border border-white/10 min-w-[180px]">
                                 <span className="material-symbols-outlined">description</span>
                                 Rules / How to Play
                             </a>
