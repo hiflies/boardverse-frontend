@@ -140,7 +140,7 @@ html, body {
 }
 
 .texture-overlay {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.03"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)"/></svg>');
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* Custom scrollbar for webkit */

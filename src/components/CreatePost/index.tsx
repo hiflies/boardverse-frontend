@@ -51,7 +51,6 @@ export default function CreatePost({refetch}: CreatePostProps) {
     return (
         <section
             className="bg-surface rounded-xl border border-primary/10 shadow-[0_8px_32px_rgba(18,5,28,0.4)] relative group">
-            <div className="absolute inset-0 texture-overlay pointer-events-none"></div>
             <div
                 className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
             <div

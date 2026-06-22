@@ -46,7 +46,6 @@ function Post({post, refetch}: PostProps, ref: Ref<HTMLDivElement>) {
         <article
             ref={ref}
             className="bg-surface rounded-xl border border-primary/5 shadow-[0_4px_24px_rgba(18,5,28,0.3)] relative group transition-all duration-300 mb-lg">
-            <div className="absolute inset-0 texture-overlay pointer-events-none rounded-xl"></div>
             {
                 Boolean(post.gameLog) &&
                 <div className="absolute z-50 top-0 left-0 w-1 h-full bg-secondary rounded-l-xl"></div>

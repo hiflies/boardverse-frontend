@@ -46,7 +46,6 @@ export default function GameDetail() {
                          src={game.imageUrl}/>
                     <div
                         className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
-                    <div className="absolute inset-0 texture-overlay"></div>
                 </div>
                 <div
                     className="relative z-10 w-full max-w-[1280px] mx-auto px-margin-mobile md:px-gutter lg:px-margin-desktop pb-lg flex flex-col md:flex-row md:items-end justify-between gap-md">

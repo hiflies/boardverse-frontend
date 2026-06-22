@@ -2,7 +2,7 @@ import {apiFetch} from "../lib/api.ts";
 import type {User} from "../types/User.ts";
 import type {Post} from "../types/Post.ts";
 
-export function getProfile(username:string, details: boolean) {
+export function getProfile(username:string, details = false) {
    let path = `/profile/${username}`;
    if (details) {
       path += `/details`;
