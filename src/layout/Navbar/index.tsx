@@ -71,11 +71,6 @@ export default function Navbar() {
                                 className="w-8 h-8 md:w-10 md:h-10 object-cover"
                                 src={user?.avatarUrl}/>
                         </Link>
-                        <button
-                            className="relative p-2 text-on-surface-variant hover:text-primary-fixed-dim transition-colors duration-200 active:scale-95 rounded-full hover:bg-surface-variant">
-                            <span className="material-symbols-outlined" data-icon="notifications">notifications</span>
-                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
-                        </button>
                     </>
                 ) : (
                     <Link

@@ -23,7 +23,7 @@ function GameCard({game}: GameCardProps, ref: Ref<HTMLAnchorElement>) {
                     src={game.imageUrl}/>
                 <div
                     className="absolute top-3 right-3 bg-surface/90 backdrop-blur-sm border border-secondary/30 text-secondary font-label-sm px-2 py-1 rounded-md flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">weight</span> {game.complexity}
+                    <span className="material-symbols-outlined text-[14px]">psychology</span> {game.complexity}
                 </div>
             </div>
             <div className="p-4 flex flex-col flex-1 z-10">
@@ -46,7 +46,7 @@ function GameCard({game}: GameCardProps, ref: Ref<HTMLAnchorElement>) {
     <span className="flex items-center gap-1"><span
         className="material-symbols-outlined text-[16px]">group</span>{game.minPlayers === game.maxPlayers ? game.minPlayers : `${game.minPlayers}-${game.maxPlayers}`}</span>
                         <span className="flex items-center gap-1"><span
-                            className="material-symbols-outlined text-[16px]">schedule</span> {game.duration}m</span>
+                            className="material-symbols-outlined text-[16px]">schedule</span> {game.duration}</span>
                     </div>
                     <button className="text-primary hover:text-secondary transition-colors">
                         <span className="material-symbols-outlined">bookmark_add</span>

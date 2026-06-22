@@ -70,8 +70,6 @@ export default function LoginPage() {
                             <div className="flex justify-between items-baseline pl-1">
                                 <label className="font-label-sm text-label-sm text-on-surface-variant block"
                                        htmlFor="login-password">Password</label>
-                                <a className="font-label-sm text-label-sm text-secondary hover:text-secondary-fixed transition-colors"
-                                   href="#">Forgot?</a>
                             </div>
                             <div className="relative">
                             <span

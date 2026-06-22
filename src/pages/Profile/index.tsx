@@ -20,14 +20,8 @@ export default function Profile() {
     }, [isEnabled, navigate]);
 
     return (
-        <main className="flex-1 lg:ml-80 w-full">
-            <div
-                className="lg:hidden flex justify-between items-center h-20 px-margin-mobile w-full bg-background border-b border-outline-variant/10 shadow-sm sticky top-0 z-30">
-                <h1 className="font-display-lg-mobile text-display-lg-mobile text-primary tracking-tight">BoardVerse</h1>
-                <button className="text-on-surface-variant hover:text-primary transition-colors">
-                    <span className="material-symbols-outlined text-2xl">notifications</span>
-                </button>
-            </div>
+        <main
+            className="flex-1 w-full px-margin-mobile md:px-margin-desktop py-md md:py-lg flex justify-center">
             <div className="p-margin-mobile md:p-margin-desktop space-y-xl max-w-6xl mx-auto pb-32 md:pb-xl pt-lg">
                 {!isLoading && user && (
                     <section className="flex items-center gap-md">
@@ -198,40 +192,6 @@ export default function Profile() {
                                         </div>
                                     </li>
                                 </ol>
-                            </div>
-                        </section>
-                        <section>
-                            <h2 className="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-2">
-                                <span className="material-symbols-outlined text-primary">groups</span>
-                                Gaming Groups
-                            </h2>
-                            <div className="space-y-3">
-                                <div
-                                    className="glass-card texture-overlay rounded-lg p-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors cursor-pointer border border-outline-variant/10">
-                                    <div
-                                        className="w-12 h-12 rounded bg-surface-container-lowest border border-outline-variant/30 flex items-center justify-center overflow-hidden">
-                                        <span className="material-symbols-outlined text-primary">chess</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-title-lg text-[16px] text-on-surface leading-tight">The
-                                            Strategist Guild</p>
-                                        <p className="font-label-sm text-label-sm text-on-surface-variant">142
-                                            Members</p>
-                                    </div>
-                                </div>
-                                <div
-                                    className="glass-card texture-overlay rounded-lg p-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors cursor-pointer border border-outline-variant/10">
-                                    <div
-                                        className="w-12 h-12 rounded bg-surface-container-lowest border border-outline-variant/30 flex items-center justify-center overflow-hidden">
-                                        <span className="material-symbols-outlined text-secondary">diamond</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-title-lg text-[16px] text-on-surface leading-tight">Heavy
-                                            Cardboard Society</p>
-                                        <p className="font-label-sm text-label-sm text-on-surface-variant">89
-                                            Members</p>
-                                    </div>
-                                </div>
                             </div>
                         </section>
                     </div>

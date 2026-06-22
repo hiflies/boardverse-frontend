@@ -61,18 +61,10 @@ export default function CreatePost({refetch}: CreatePostProps) {
                     <span className="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
                     Discuss
                 </button>
-                <button
-                    className="flex-1 py-3 px-4 font-label-md text-label-md text-on-surface-variant hover:text-primary-fixed hover:bg-surface-variant/20 transition-colors flex items-center justify-center gap-2">
-                    <span className="material-symbols-outlined text-[18px]"
-                          data-icon="sports_esports">sports_esports</span>
-                    Play
-                </button>
-                <button
-                    className="flex-1 py-3 px-4 font-label-md text-label-md text-on-surface-variant hover:text-primary-fixed hover:bg-surface-variant/20 transition-colors flex items-center justify-center gap-2">
-                                    <span className="material-symbols-outlined text-[18px]"
-                                          data-icon="sync_alt">sync_alt</span>
-                    Trade
-                </button>
+                <div
+                    className="flex-2 py-3 px-4 font-label-md text-label-md text-on-surface-variant transition-colors flex items-center justify-center gap-2">
+                </div>
+
             </div>
             <div className="p-md relative z-10 flex flex-col gap-md">
                 <div className="flex gap-sm items-start">
