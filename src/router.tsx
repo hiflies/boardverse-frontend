@@ -42,6 +42,8 @@ export const gameListRoute = createRoute({
         playerCount: typeof search.playerCount === 'number' ? search.playerCount : undefined,
         minRating: typeof search.minRating === 'number' ? search.minRating : undefined,
         maxRating: typeof search.maxRating === 'number' ? search.maxRating : undefined,
+        username: typeof search.username === 'string' ? search.username : undefined,
+        sortBy: typeof search.sortBy === 'string' ? search.sortBy : undefined,
     }) as GameListSearchParams,
 })
 

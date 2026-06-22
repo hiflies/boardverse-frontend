@@ -1,5 +1,5 @@
 import {useProfile} from "../../hooks/useProfile.ts";
-import {gameDetailRoute, loginRoute, profileRoute} from "../../router.tsx";
+import {gameDetailRoute, gameListRoute, loginRoute, profileRoute} from "../../router.tsx";
 import {useAuthStore, useIsAuthenticated} from "../../store/auth.ts";
 import {useEffect} from "react";
 import ProfilePhoto from "../../components/ProfilePhoto";
@@ -9,6 +9,7 @@ import clsx from "clsx";
 import {Link} from "@tanstack/react-router";
 import type {GameLog} from "../../types/GameLog.ts";
 import {deleteGameLog} from "../../api/gamelogs.ts";
+import {useGames} from "../../hooks/useGames.ts";
 
 export default function Profile() {
     const username = profileRoute.useParams({select: params => params.username});
@@ -16,6 +17,11 @@ export default function Profile() {
     const authenticatedUsername = useAuthStore(a => a.username);
     const isEnabled = Boolean(username) || isAuthenticated;
     const {data: user, isLoading, isError} = useProfile(username, isEnabled, true);
+    const {data: games, isLoading: isGamesLoading, isError: isGamesError} = useGames({
+        username: user?.username,
+        pageSize: 3,
+        sortBy: 'rating',
+    }, Boolean(user));
     const navigate = loginRoute.useNavigate();
 
     useEffect(() => {
@@ -32,9 +38,12 @@ export default function Profile() {
             .then(() => refetch());
     }
 
-    if (isLoading || isError || !user) {
+    if (isLoading || isError || !user || isGamesLoading || isGamesError || !games) {
         return null;
     }
+
+    const allGames = games?.pages.flatMap(p => p.items) ?? []
+
     return (
         <main
             className="flex-1 w-full px-margin-mobile md:px-margin-desktop py-md md:py-lg flex justify-center">
@@ -58,79 +67,42 @@ export default function Profile() {
                                     <span className="material-symbols-outlined text-primary">diamond</span>
                                     Featured Collection
                                 </h2>
-                                <a className="font-label-md text-label-md text-primary hover:text-surface-tint transition-colors"
-                                   href="#">View All</a>
+                                <Link to={gameListRoute.fullPath}
+                                      search={{username: user.username, sortBy: 'rating'}}
+                                      className="font-label-md text-label-md text-primary hover:text-surface-tint transition-colors">
+                                    View All
+                                </Link>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
-                                <article
-                                    className="glass-card texture-overlay rounded-lg overflow-hidden group cursor-pointer relative pb-4 transition-transform hover:-translate-y-1 duration-300">
-                                    <div className="aspect-[3/4] overflow-hidden bg-surface-container-lowest relative">
-                                        <div
-                                            className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 opacity-80"></div>
-                                        <img alt="Brass: Birmingham Cover"
-                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                             data-alt="A close-up, dramatic shot of a heavy euro-style board game box cover, reminiscent of Brass: Birmingham. The visual features dark, industrial revolution themes with deep browns, blacks, and glowing amber highlights. The aesthetic is premium, tactile, and moody, emphasizing the high-quality cardboard texture and intricate artwork."
-                                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2O8p6uy0Of7pqd9fHYka-EirWcRYodOigs-qPBKAEnz-OZzI-kDpfN_ulQRiBO_KhMtjzM-I_jYnlDF-NXaLQM0Iq4qiRDqTs4W9bCbCJcN23BlXO_q3IEABl9-x2iOZMkfSsAV3ne50ABDmUDvYQN3hLwfMBAmSb3kU5ZvPLrkGR4g9w5qjRgzKaPMNcfcefARv9jntd9KHRp6sGXFE7q4Y1sE3BIsIVdS5Sj1hbPPa8ri_Q4Rg3Ltf54nhDxA-eP2snYINMKU4"/>
-                                        <div
-                                            className="absolute top-3 right-3 z-20 bg-surface-container px-2 py-1 rounded text-secondary font-label-sm text-label-sm border border-secondary/20 shadow-sm backdrop-blur-sm">
-                                            Heavy Euro
-                                        </div>
-                                    </div>
-                                    <div className="relative z-20 px-4 -mt-6">
-                                        <h3 className="font-title-lg text-title-lg text-on-surface mb-1 truncate">Brass:
-                                            Birmingham</h3>
-                                        <p className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
-                                            <span className="material-symbols-outlined text-[14px]">star</span> 9.8
-                                            Rating
-                                        </p>
-                                    </div>
-                                </article>
-                                <article
-                                    className="glass-card texture-overlay rounded-lg overflow-hidden group cursor-pointer relative pb-4 transition-transform hover:-translate-y-1 duration-300">
-                                    <div className="aspect-[3/4] overflow-hidden bg-surface-container-lowest relative">
-                                        <div
-                                            className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 opacity-80"></div>
-                                        <img alt="Scythe Cover"
-                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                             data-alt="A stunning, painterly depiction of an alternate-history board game box cover, similar in vibe to Scythe. The artwork features sweeping landscapes at dusk with giant dieselpunk mechs looming in the background. The color palette leans heavily into moody purples, muted greens, and glowing orange accents, maintaining a high-contrast, premium collector's aesthetic."
-                                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpHPjRncanr4Pcje9HLpMxMbV96FKd95djIqRuHKGlz1_9R6D1763rt9TQKGttN7fc_UPtVn0-50Q7idMg9InTuDxfzZVUYV7vNMSb-MH-FXOssMHRQSO6NMkl0AjRAjVBNi957FBMLLsNuBDF0ykrv0ZkG--xdrpvG8OrEsFIRYE-ntCe24LxUcbLiAuOt7yR8YYdzVr5-7z8A2uhkWSEHnMq4KLfMQmzebomLXqsOiYRlCYRIjC27TKmhPcwJMKrg6ZjRt3aEBc"/>
-                                        <div
-                                            className="absolute top-3 right-3 z-20 bg-surface-container px-2 py-1 rounded text-secondary font-label-sm text-label-sm border border-secondary/20 shadow-sm backdrop-blur-sm">
-                                            Engine Builder
-                                        </div>
-                                    </div>
-                                    <div className="relative z-20 px-4 -mt-6">
-                                        <h3 className="font-title-lg text-title-lg text-on-surface mb-1 truncate">Scythe</h3>
-                                        <p className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
-                                            <span className="material-symbols-outlined text-[14px]">star</span> 9.5
-                                            Rating
-                                        </p>
-                                    </div>
-                                </article>
-                                <article
-                                    className="glass-card texture-overlay rounded-lg overflow-hidden group cursor-pointer relative pb-4 transition-transform hover:-translate-y-1 duration-300">
-                                    <div className="aspect-[3/4] overflow-hidden bg-surface-container-lowest relative">
-                                        <div
-                                            className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 opacity-80"></div>
-                                        <img alt="Dune Imperium Cover"
-                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                             data-alt="An evocative, premium board game box cover illustration featuring a harsh desert planet setting with subtle sci-fi elements. The composition is dominated by deep, rich shadows and striking gold/sand tones. The lighting is cinematic, creating a sense of depth and mystery consistent with a high-end, tactile tabletop gaming experience."
-                                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnWVaAUR8Ow8Sh9PNHkVk-x76Lu-a-XnAbQu7TpdRg_QXv1ysfxybE-OuibURqEX0pqhxqpGOOjJ0YnWBt7y--kM7hrDGxlsR2dSAuxVaLW6UVJDJFYXe3D7ORDqUckti5btIAv5j40EuVRxnxKpHVcugF22g0_GAkFmkfQl98l4U8A0HTk25WhfiOVR4g0wpHXpZaLPZDG7hR7VLl4KbdgpcfTBreMJHjnyV_fRziLhwytScTbp9bcaU-zI60LvHZQgsnVghTUpA"/>
-                                        <div
-                                            className="absolute top-3 right-3 z-20 bg-surface-container px-2 py-1 rounded text-secondary font-label-sm text-label-sm border border-secondary/20 shadow-sm backdrop-blur-sm">
-                                            Deck Builder
-                                        </div>
-                                    </div>
-                                    <div className="relative z-20 px-4 -mt-6">
-                                        <h3 className="font-title-lg text-title-lg text-on-surface mb-1 truncate">Dune:
-                                            Imperium</h3>
-                                        <p className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
-                                            <span className="material-symbols-outlined text-[14px]">star</span> 9.3
-                                            Rating
-                                        </p>
-                                    </div>
-                                </article>
-                            </div>
+                            {allGames.length > 0 && (
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
+                                    {allGames.map(game => (
+                                        <Link
+                                            to={gameDetailRoute.fullPath}
+                                            params={{gameId: game.id.toString()}}
+                                            key={game.id}
+                                            className="glass-card texture-overlay rounded-lg overflow-hidden group cursor-pointer relative pb-4 transition-transform hover:-translate-y-1 duration-300">
+                                            <div
+                                                className="aspect-3/4 overflow-hidden bg-surface-container-lowest relative">
+                                                <div
+                                                    className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent z-10 opacity-80"></div>
+                                                <img alt={game.name}
+                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                     src={game.imageUrl}/>
+                                            </div>
+                                            <div className="relative z-20 px-4 -mt-6">
+                                                <h3 className="font-title-lg text-title-lg text-on-surface mb-1 truncate">{game.name}</h3>
+                                                <p className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+                                                    <span className="material-symbols-outlined text-[14px]">star</span>
+                                                    {game.averageRating.toFixed(1)} Rating
+                                                </p>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>)}
+
+                            {allGames.length == 0 && (
+                                <p className="text-secondary font-body-md text-body-md">No games collected</p>
+                            )}
                         </section>
                         <section>
                             <h2 className="font-headline-md text-headline-md text-on-surface mb-md flex items-center gap-2">
@@ -143,7 +115,7 @@ export default function Profile() {
                                                   buttonIcon={!username || username === authenticatedUsername ? 'delete' : undefined}
                                                   onButtonClick={handleDelete}
                                 >
-                                    There is no game log from this user.
+                                    No game logged
                                 </FilteredGameLogs>
                             </div>
                         </section>
@@ -153,7 +125,7 @@ export default function Profile() {
                                 Posts
                             </h2>
                             <FilteredPosts filter={{userId: user.id.toString()}}>
-                                There is no post from this user.
+                                No post shared
                             </FilteredPosts>
                         </section>
                     </div>
@@ -165,7 +137,7 @@ export default function Profile() {
                             </h2>
                             <div className="glass-card texture-overlay rounded-xl p-md">
                                 <div className="space-y-3">
-                                    {user.topGames!.map((game, index) => (
+                                    {user.topGames!.length > 0 && user.topGames!.map((game, index) => (
                                         <Link
                                             to={gameDetailRoute.fullPath}
                                             params={{gameId: game.id.toString()}}
@@ -189,6 +161,10 @@ export default function Profile() {
                                             </div>
                                         </Link>
                                     ))}
+
+                                    {user.topGames!.length === 0 && (
+                                        <p className="text-secondary font-body-md text-body-md">No game played</p>
+                                    )}
                                 </div>
                             </div>
                         </section>

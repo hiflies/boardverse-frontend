@@ -10,6 +10,9 @@ export type GamesFilter = {
     minRating?: number
     maxRating?: number
     page?: number
+    pageSize?: number
+    sortBy?: string
+    username?: string
 }
 
 export function getGames(filter: GamesFilter = {}) {
@@ -21,7 +24,10 @@ export function getGames(filter: GamesFilter = {}) {
     if (filter.playerCount != null) params.set('playerCount', String(filter.playerCount))
     if (filter.minRating != null) params.set('minRating', String(filter.minRating))
     if (filter.maxRating != null) params.set('maxRating', String(filter.maxRating))
+    if (filter.username != null) params.set('username', String(filter.username))
+    if (filter.sortBy != null) params.set('sortBy', String(filter.sortBy))
     if (filter.page && filter.page > 1) params.set('page', String(filter.page))
+    if (filter.pageSize) params.set('pageSize', String(filter.pageSize))
     const qs = params.toString()
     return apiFetch<PagedResult<Game>>(`/games${qs ? `?${qs}` : ''}`)
 }

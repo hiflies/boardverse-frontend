@@ -6,4 +6,6 @@ export type GameListSearchParams = {
     playerCount?: number,
     minRating?: number,
     maxRating?: number,
+    username?: string,
+    sortBy?: string,
 };

@@ -42,8 +42,9 @@ export default function GameList() {
                 <div className="flex flex-col gap-4">
                     <div className="flex items-end justify-between">
                         <div>
-                            <h1 className="font-display-lg md:text-display-lg text-display-lg-mobile font-bold text-on-background">Explore
-                                Library</h1>
+                            <h1 className="font-display-lg md:text-display-lg text-display-lg-mobile font-bold text-on-background">
+                                {search.username ? `${search.username}'s` : 'Explore'} Library
+                            </h1>
                             {data && (
                                 <p className="text-on-surface-variant mt-2 font-body-lg text-body-lg">
                                     Showing {allItems.length} of {totalCount} titles.
