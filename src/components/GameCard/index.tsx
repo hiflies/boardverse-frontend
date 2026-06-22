@@ -23,6 +23,7 @@ function GameCard({game}: GameCardProps, ref: Ref<HTMLAnchorElement>) {
                     src={game.imageUrl}/>
                 <div
                     className="absolute top-3 right-3 bg-surface/90 backdrop-blur-sm border border-secondary/30 text-secondary font-label-sm px-2 py-1 rounded-md flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px]">star</span> {game.averageRating}
                     <span className="material-symbols-outlined text-[14px]">psychology</span> {game.complexity}
                 </div>
             </div>

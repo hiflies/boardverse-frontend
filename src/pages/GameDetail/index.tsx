@@ -1,5 +1,5 @@
 import {useGame} from "../../hooks/useGames.ts";
-import {gameDetailRoute, loginRoute} from "../../router.tsx";
+import {gameDetailRoute, gameListRoute, loginRoute} from "../../router.tsx";
 import {useState} from "react";
 import clsx from "clsx";
 import FilteredPosts from "../../components/FilteredPosts";
@@ -7,6 +7,7 @@ import Markdown from "../../components/Markdown";
 import Modal from "../../components/Modal";
 import CreateGameLog from "../../components/CreateGameLog";
 import {useIsAuthenticated} from "../../store/auth.ts";
+import {Link} from "@tanstack/react-router";
 
 export default function GameDetail() {
     const gameId = gameDetailRoute.useParams({select: params => params.gameId});
@@ -144,12 +145,13 @@ export default function GameDetail() {
                                 <div className="flex flex-wrap gap-3">
                                     {
                                         game.categories.map(category => (
-                                            <span
+                                            <Link
+                                                to={gameListRoute.fullPath}
+                                                search={{categories: [category.id]}}
                                                 key={category.id}
-                                                className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-default">
-                                        {category.name}
-                                    </span>
-
+                                                className="bg-surface-container text-on-surface px-4 py-2 rounded-lg font-label-md text-label-md border border-outline-variant/20 hover:border-secondary/50 transition-colors cursor-pointer">
+                                                {category.name}
+                                            </Link>
                                         ))
                                     }
                                 </div>

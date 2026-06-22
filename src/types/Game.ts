@@ -18,10 +18,10 @@ export type Game = {
     imageUrl: string
     duration: string
     complexity: number
+    averageRating: number
 };
 
 export type GameDetails = Game & {
-    averageRating: number
     gameRulesUrl: string
     releaseYear: number
     minAge: number
